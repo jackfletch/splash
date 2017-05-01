@@ -6,8 +6,11 @@ import media from './../../components/style-utils'
 import PlayerSelector from '../../components/PlayerSelector'
 import HexShotchart from '../../components/HexShotchart'
 import VShootingSignature from '../../components/VShootingSignature'
+import LineChart from '../../components/LineChart'
 
+import { binStats } from './../../js/bin'
 import { calcRibbonStats } from './../../js/ribbonStats'
+
 
 const Title = styled.h1`
   color: midnightblue;
@@ -46,14 +49,28 @@ export default class ChartDashboard extends React.Component {
         'LeBron James': this.cleanData(rawDataLebron),
         'Steph Curry': this.cleanData(rawDataSteph)
       },
+      hover: {
+        distance: 0,
+        toggle: false
+      },
       maxDistance: 35
     }
     this.setDataset = this.setDataset.bind(this)
+    this.updateHover = this.updateHover.bind(this)
   }
 
   setDataset(e) {
     this.setState({
       dataset: e.target.value
+    })
+  }
+
+  updateHover(e) {
+    this.setState({
+      hover: {
+        distance: e.distance,
+        toggle: e.toggle
+      }
     })
   }
 
@@ -72,6 +89,7 @@ export default class ChartDashboard extends React.Component {
 
   render() {
     const ribbonedData = calcRibbonStats(this.state.data[this.state.dataset], this.state.maxDistance)
+    const binnedData = binStats(this.state.data[this.state.dataset], this.state.maxDistance)
 
     return (
       <div>
@@ -83,10 +101,17 @@ export default class ChartDashboard extends React.Component {
         <ChartsDiv>
           <HexShotchart
             data={this.state.data[this.state.dataset]}
+            hover={this.state.hover}
           />
           <RightChartsDiv>
             <VShootingSignature
               data={ribbonedData}
+              hover={this.state.hover}
+              maxDistance={this.state.maxDistance}
+            />
+            <LineChart
+              data={binnedData}
+              updateHover={this.updateHover}
               maxDistance={this.state.maxDistance}
             />
           </RightChartsDiv>

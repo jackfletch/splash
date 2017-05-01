@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import * as d3 from 'd3'
 import styled from 'styled-components'
-import { VictoryArea, VictoryAxis, VictoryChart, VictoryLabel } from 'victory'
+import { VictoryArea, VictoryAxis, VictoryBar, VictoryChart, VictoryLabel } from 'victory'
 
 import MyWrapper from './Wrapper'
 
@@ -23,6 +23,7 @@ class VShootingSignature extends React.Component {
     super(props)
     this.state = {
       data: props.data,
+      hover: props.hover,
       maxDistance: props.maxDistance
     }
   }
@@ -90,6 +91,7 @@ class VShootingSignature extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       data: nextProps.data,
+      hover: nextProps.hover,
       maxDistance: nextProps.maxDistance
     })
   }
@@ -216,6 +218,9 @@ class VShootingSignature extends React.Component {
             tickFormat={d => `${(100 * d).toFixed(0)}%`}
             tickLabelComponent={<VictoryLabel dx={7} />}
           />
+          <VictoryBar
+            data={[{ x: this.state.hover.distance, y: 1.2 }]}
+          />
         </VictoryChart>
       </Div>
     )
@@ -231,6 +236,7 @@ VShootingSignature.propTypes = {
       colorValue: PropTypes.number.isRequired
     })
   ).isRequired,
+  hover: PropTypes.object.isRequired,
   maxDistance: PropTypes.number.isRequired
 }
 
