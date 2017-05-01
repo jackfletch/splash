@@ -5,7 +5,9 @@ import media from './../../components/style-utils'
 
 import PlayerSelector from '../../components/PlayerSelector'
 import HexShotchart from '../../components/HexShotchart'
+import VShootingSignature from '../../components/VShootingSignature'
 
+import { calcRibbonStats } from './../../js/ribbonStats'
 
 const Title = styled.h1`
   color: midnightblue;
@@ -15,6 +17,18 @@ const ChartsDiv = styled.div`
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  ${media.tablet`flex-direction: column;`}
+`
+const RightChartsDiv = styled.div`
+  flex: 1;
+  box-sizing: border-box;
+  background-color: #7e8000;
+  display: flex;
+  flex-wrap: wrap;
+  align-self: stretch;
+  align-items: center;
+  height: auto;
+  width: 100%;
   ${media.tablet`flex-direction: column;`}
 `
 
@@ -57,6 +71,8 @@ export default class ChartDashboard extends React.Component {
   }
 
   render() {
+    const ribbonedData = calcRibbonStats(this.state.data[this.state.dataset], this.state.maxDistance)
+
     return (
       <div>
         <Title>Chart Dashboard</Title>
@@ -68,6 +84,12 @@ export default class ChartDashboard extends React.Component {
           <HexShotchart
             data={this.state.data[this.state.dataset]}
           />
+          <RightChartsDiv>
+            <VShootingSignature
+              data={ribbonedData}
+              maxDistance={this.state.maxDistance}
+            />
+          </RightChartsDiv>
         </ChartsDiv>
       </div>
     )
