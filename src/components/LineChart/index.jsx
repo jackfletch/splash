@@ -43,14 +43,17 @@ class LineChart extends Component {
     super(props)
     this.state = {
       data: props.data,
-      maxDistance: props.maxDistance,
+      hover: props.hover,
+      maxDistance: props.maxDistance
     }
-    this.updateHover = props.updateHover
+    this.updateActivated = props.activated
+    this.updateDeactivated = props.deactivated
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
       data: nextProps.data,
+      hover: nextProps.hover,
       maxDistance: nextProps.maxDistance
     })
   }
@@ -184,17 +187,20 @@ class LineChart extends Component {
               dimension="x"
               labels={d => `shot freq %: ${((100 * d.y) / this.state.data.totalShots).toFixed(2)}%`}
               labelComponent={<Cursor totalShots={this.state.data.totalShots}/>}
-              onDeactivated={(points)=>{
-                return (null)
-              }
-                }
               onActivated={(points) => {
-                return (this.updateHover({
-                  distance: points[0].x,
-                  toggle: true
-                }))
-              }
+                this.updateActivated(points[0].x)
+              }}
+              onDeactivated={(points) => {
+                if (points.length) {
+                  this.updateDeactivated(points[0].x)
                 }
+              }}
+              events={{onMouseOut: (evt) => {
+                if (!this.state.hover.toggle) {
+                  this.updateActivated(-1)
+                  this.updateDeactivated(-1)
+                }
+              }}}
             />
           }
           style={{ parent: styles.parent }}
@@ -234,8 +240,13 @@ class LineChart extends Component {
 
 LineChart.propTypes = {
   data: PropTypes.any.isRequired,
-  updateHover: PropTypes.func.isRequired,
-  maxDistance: PropTypes.number.isRequired
+  hover: PropTypes.shape({
+    distance: PropTypes.number.isRequired,
+    toggle: PropTypes.bool.isRequired
+  }).isRequired,
+  maxDistance: PropTypes.number.isRequired,
+  activated: PropTypes.func.isRequired,
+  deactivated: PropTypes.func.isRequired
 }
 
 export default LineChart

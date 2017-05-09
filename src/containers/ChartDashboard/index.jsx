@@ -40,6 +40,8 @@ export default class ChartDashboard extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      activated: 0,
+      deactivated: 0,
       binnedData: [],
       dataset: 2544,
       data: undefined,
@@ -52,7 +54,8 @@ export default class ChartDashboard extends React.Component {
       ribbonedData: []
     }
     this.setDataset = this.setDataset.bind(this)
-    this.updateHover = this.updateHover.bind(this)
+    this.updateActivated = this.updateActivated.bind(this)
+    this.updateDeactivated = this.updateDeactivated.bind(this)
   }
 
   componentDidMount() {
@@ -100,13 +103,20 @@ export default class ChartDashboard extends React.Component {
     })
   }
 
-  updateHover(e) {
+  updateActivated(distance) {
     this.setState({
-      hover: {
-        distance: e.distance,
-        toggle: e.toggle
-      }
+      activated: distance
     })
+  }
+
+  updateDeactivated(distance) {
+    this.setState({
+      deactivated: distance
+    })
+  }
+
+  checkPoints() {
+    return (this.state.activated !== this.state.deactivated)
   }
 
   render() {
@@ -115,6 +125,10 @@ export default class ChartDashboard extends React.Component {
     }
     if (this.state.data.length === 0) {
       return <div>No result found for this player</div>
+    }
+    const hover = {
+      distance: this.state.activated,
+      toggle: this.checkPoints()
     }
 
     return (
@@ -128,18 +142,20 @@ export default class ChartDashboard extends React.Component {
         <ChartsDiv>
           <HexShotchart
             data={this.state.data}
-            hover={this.state.hover}
+            hover={hover}
           />
           <RightChartsDiv>
             <VShootingSignature
               data={this.state.ribbonedData}
-              hover={this.state.hover}
+              hover={hover}
               maxDistance={this.state.maxDistance}
             />
             <LineChart
               data={this.state.binnedData}
-              updateHover={this.updateHover}
+              hover={hover}
               maxDistance={this.state.maxDistance}
+              activated={this.updateActivated}
+              deactivated={this.updateDeactivated}
             />
           </RightChartsDiv>
         </ChartsDiv>

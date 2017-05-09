@@ -218,9 +218,12 @@ class VShootingSignature extends React.Component {
             tickFormat={d => `${(100 * d).toFixed(0)}%`}
             tickLabelComponent={<VictoryLabel dx={7} />}
           />
-          <VictoryBar
-            data={[{ x: this.state.hover.distance, y: 1.2 }]}
-          />
+          {this.state.hover.toggle ?
+            <VictoryBar
+              data={[{ x: this.state.hover.distance, y: 1.2 }]}
+            /> :
+            null
+          }
         </VictoryChart>
       </Div>
     )

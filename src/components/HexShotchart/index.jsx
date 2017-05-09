@@ -130,18 +130,19 @@ class ShotChart extends React.Component {
               height={this.height}
               scale={scales}
             />
-            <ellipse
-              clipPath="url(#clip)"
-              cx={this.xScale(0)}
-              cy={this.yScale(0)}
-              rx={this.xScale((this.props.hover.distance + 0.5) * 10) - this.xScale(0)}
-              ry={this.yScale(0) - this.yScale((this.props.hover.distance + 0.5) * 10)}
-              style={this.props.hover.toggle ? null : { display: 'none' }}
-              strokeWidth={10}
-              fill="none"
-              stroke={'rgba(0, 0, 0, 0.2)'}
-            />
-
+            {this.props.hover.toggle ?
+              <ellipse
+                clipPath="url(#clip)"
+                cx={this.xScale(0)}
+                cy={this.yScale(0)}
+                rx={this.xScale((this.props.hover.distance + 0.5) * 10) - this.xScale(0)}
+                ry={this.yScale(0) - this.yScale((this.props.hover.distance + 0.5) * 10)}
+                style={this.props.hover.toggle ? null : { display: 'none' }}
+                strokeWidth={10}
+                fill="none"
+                stroke={'rgba(0, 0, 0, 0.2)'}
+              /> : null
+            }
             {this.state.tooltip.show ? <Tooltip vals={this.state.tooltip} /> : null}
           </g>
         </Svg>
