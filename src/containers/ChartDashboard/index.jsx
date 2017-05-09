@@ -124,7 +124,30 @@ export default class ChartDashboard extends React.Component {
       return (<div>Still fetching data</div>)
     }
     if (this.state.data.length === 0) {
-      return <div>No result found for this player</div>
+      return (
+        <div>
+          <Title>Chart Dashboard</Title>
+          <PlayerSelector
+            player={this.state.dataset}
+            players={this.state.players}
+            setDataset={this.setDataset}
+          />
+          <div>No result found for this player</div>
+        </div>
+      )
+    }
+    if (this.state.data.length <= 50) {
+      return (
+        <div>
+          <Title>Chart Dashboard</Title>
+          <PlayerSelector
+            player={this.state.dataset}
+            players={this.state.players}
+            setDataset={this.setDataset}
+          />
+          <div>Not enough shots by this player for any meaningful data</div>
+        </div>
+      )
     }
     const hover = {
       distance: this.state.activated,
