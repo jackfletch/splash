@@ -130,7 +130,7 @@ class ShotChart extends React.Component {
               height={this.height}
               scale={scales}
             />
-            {this.props.hover.toggle ?
+            {(this.props.hover.toggle && this.props.hover.distance >= 0) ?
               <ellipse
                 clipPath="url(#clip)"
                 cx={this.xScale(0)}

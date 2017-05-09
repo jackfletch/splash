@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import * as d3 from 'd3'
 import styled from 'styled-components'
-import { VictoryArea, VictoryAxis, VictoryBar, VictoryChart, VictoryLabel } from 'victory'
+import { VictoryArea, VictoryAxis, VictoryChart, VictoryLabel } from 'victory'
 
 import MyWrapper from './Wrapper'
 
@@ -17,6 +17,27 @@ const Div = styled.div`
   width: 100%
   min-width: 25rem;
 `
+
+const Cursor = props => (
+  <g>
+    <path d={`M${props.scale.x(props.x)},250 L${props.scale.x(props.x)},50`} style={{ strokeWidth: 1, stroke: 'rgba(0, 0, 0, 0.2)' }} />
+  </g>
+  )
+
+Cursor.defaultProps = {
+  scale: {
+    x: d => d,
+    y: d => d
+  }
+}
+
+Cursor.propTypes = {
+  scale: PropTypes.shape({
+    x: PropTypes.func.isRequired,
+    y: PropTypes.func.isRequired
+  }),
+  x: PropTypes.number.isRequired
+}
 
 class VShootingSignature extends React.Component {
   constructor(props) {
@@ -86,6 +107,7 @@ class VShootingSignature extends React.Component {
         stopColor: colorScale(currData.colorValue)
       })
     }
+    this.areaData = this.formatData(this.state.data)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -94,6 +116,10 @@ class VShootingSignature extends React.Component {
       hover: nextProps.hover,
       maxDistance: nextProps.maxDistance
     })
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    this.areaData = this.formatData(nextState.data)
   }
 
   getTickValues() {
@@ -199,7 +225,7 @@ class VShootingSignature extends React.Component {
           <MyWrapper colorData={this.colorData} gradientId={gradientId} >
             <VictoryArea
               standalone={false}
-              data={this.formatData(this.state.data)}
+              data={this.areaData}
               interpolation={'basis'}
               style={{ data: { fill: `url(#${gradientId})` } }}
             />
@@ -219,9 +245,7 @@ class VShootingSignature extends React.Component {
             tickLabelComponent={<VictoryLabel dx={7} />}
           />
           {this.state.hover.toggle ?
-            <VictoryBar
-              data={[{ x: this.state.hover.distance, y: 1.2 }]}
-            /> :
+            <Cursor x={this.state.hover.distance} /> :
             null
           }
         </VictoryChart>

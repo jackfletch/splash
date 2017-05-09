@@ -197,8 +197,8 @@ class LineChart extends Component {
               }}
               events={{onMouseOut: (evt) => {
                 if (!this.state.hover.toggle) {
-                  this.updateActivated(-1)
-                  this.updateDeactivated(-1)
+                  this.updateActivated(-15)
+                  this.updateDeactivated(-15)
                 }
               }}}
             />
