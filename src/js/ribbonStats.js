@@ -12,7 +12,7 @@ export function calcRibbonStats(data, maxDistance) {
       } else {
         binnedShots[shot.distance] = [shot]
       }
-      totalMakes += shot.make
+      totalMakes += shot.made_flag
     } else {
       totalShots -= 1
     }
@@ -23,7 +23,7 @@ export function calcRibbonStats(data, maxDistance) {
   const shootingPctArray = []
   Object.keys(binnedShots).forEach((bin) => {
     const shots = binnedShots[bin]
-    const shootingPct = shots.reduce((a, b) => a + b.make, 0) / shots.length
+    const shootingPct = shots.reduce((a, b) => a + b.made_flag, 0) / shots.length
     const width = (40 * shots.length) / (totalShots / 30)
     binData.push({ x: parseInt(bin), y: shootingPct, widthValue: width, colorValue: shootingPct - avgShootingPct })
     shootingPctArray.push(shootingPct)

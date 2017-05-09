@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import axios from 'axios'
 
 import media from './../../components/style-utils'
 
@@ -38,30 +39,64 @@ const RightChartsDiv = styled.div`
 export default class ChartDashboard extends React.Component {
   constructor(props) {
     super(props)
-    // TODO: this is temporary setup until db is connected
-    // 201939
-    const rawDataSteph = require('./../../../data/steph.json') // eslint-disable-line global-require
-    // 2544
-    const rawDataLebron = require('./../../../data/lebron.json') // eslint-disable-line global-require
     this.state = {
-      dataset: 'LeBron James',
-      data: {
-        'LeBron James': this.cleanData(rawDataLebron),
-        'Steph Curry': this.cleanData(rawDataSteph)
-      },
+      binnedData: [],
+      dataset: 2544,
+      data: undefined,
       hover: {
         distance: 0,
         toggle: false
       },
-      maxDistance: 35
+      maxDistance: 35,
+      players: this.getPlayers(),
+      ribbonedData: []
     }
     this.setDataset = this.setDataset.bind(this)
     this.updateHover = this.updateHover.bind(this)
   }
 
+  componentDidMount() {
+    this.getShots(this.state.dataset)
+  }
+
+  getPlayers() {
+    axios.get('http://localhost:3000/api/players')
+      .then((response) => {
+        this.setPlayers(response.data)
+      })
+  }
+
+  getShots(playerId) {
+    this.setRendering(true)
+    axios.get(`http://localhost:3000/api/shots/${playerId}`)
+      .then((response) => {
+        this.setData(response.data)
+        this.setRendering(false)
+      })
+  }
+
+  setRendering(toggle) {
+    this.setState({ rendering: toggle })
+  }
+
+  setData(e) {
+    this.setState({
+      data: e,
+      ribbonedData: calcRibbonStats(e, this.state.maxDistance),
+      binnedData: binStats(e, this.state.maxDistance)
+    })
+  }
+
   setDataset(e) {
     this.setState({
-      dataset: e.target.value
+      dataset: parseInt(e.target.value)
+    })
+    this.getShots(e.target.value)
+  }
+
+  setPlayers(e) {
+    this.setState({
+      players: e
     })
   }
 
@@ -74,43 +109,35 @@ export default class ChartDashboard extends React.Component {
     })
   }
 
-  cleanData(rawData) {
-    const data = []
-    const shotData = rawData.resultSets[0].rowSet
-    for (let i = 0; i < shotData.length; i++) {
-      const x = shotData[i][17]
-      const y = shotData[i][18]
-      const make = shotData[i][20]
-      const distance = shotData[i][16]
-      data.push({ x, y, make, distance })
-    }
-    return data
-  }
-
   render() {
-    const ribbonedData = calcRibbonStats(this.state.data[this.state.dataset], this.state.maxDistance)
-    const binnedData = binStats(this.state.data[this.state.dataset], this.state.maxDistance)
+    if (this.state.data === undefined) {
+      return (<div>Still fetching data</div>)
+    }
+    if (this.state.data.length === 0) {
+      return <div>No result found for this player</div>
+    }
 
     return (
       <div>
         <Title>Chart Dashboard</Title>
         <PlayerSelector
           player={this.state.dataset}
+          players={this.state.players}
           setDataset={this.setDataset}
         />
         <ChartsDiv>
           <HexShotchart
-            data={this.state.data[this.state.dataset]}
+            data={this.state.data}
             hover={this.state.hover}
           />
           <RightChartsDiv>
             <VShootingSignature
-              data={ribbonedData}
+              data={this.state.ribbonedData}
               hover={this.state.hover}
               maxDistance={this.state.maxDistance}
             />
             <LineChart
-              data={binnedData}
+              data={this.state.binnedData}
               updateHover={this.updateHover}
               maxDistance={this.state.maxDistance}
             />

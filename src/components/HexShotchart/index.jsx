@@ -86,7 +86,7 @@ class ShotChart extends React.Component {
     const color = d3.scaleSequential(d3.interpolatePlasma)
       .domain([0, 1])
 
-    const points = d3.range(Object.keys(this.state.data).length).map(i => [this.state.data[i].x, this.state.data[i].y, this.state.data[i].make])
+    const points = this.state.data.map(shot => [shot.x, shot.y, shot.made_flag])
 
     const hexbinPath = hexbin()
       .size([this.width, this.height])
@@ -151,14 +151,15 @@ class ShotChart extends React.Component {
 }
 
 ShotChart.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      x: PropTypes.number.isRequired,
-      y: PropTypes.number.isRequired,
-      make: PropTypes.number.isRequired,
-      distance: PropTypes.number.isRequired
-    }).isRequired
-  ).isRequired,
+  // data: PropTypes.arrayOf(
+  //   PropTypes.shape({
+  //     x: PropTypes.number.isRequired,
+  //     y: PropTypes.number.isRequired,
+  //     made_flag: PropTypes.bool.isRequired,
+  //     distance: PropTypes.number.isRequired
+  //   }).isRequired
+  // ).isRequired,
+  data: PropTypes.any.isRequired,
   hover: PropTypes.object.isRequired
 }
 

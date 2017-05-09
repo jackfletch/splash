@@ -24,8 +24,6 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
         <p>this is a work in progress</p>
         <H2>TODO:</H2>
         <Ul>
-          <li>make git repo</li>
-          <li>integrate with database</li>
           <li>add fancy player selection</li>
           <li>add more charts</li>
           <li>style everything</li>
