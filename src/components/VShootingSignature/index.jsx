@@ -66,10 +66,6 @@ class VShootingSignature extends React.Component {
       .domain([0, 1])
       .range([this.height, 0])
 
-    const offset = d3.scaleLinear()
-      .domain(x.domain())
-      .range([0, 100])
-
     const w = d3.scaleLinear()
       .domain([0, this.height])
       .range([0, 0.4])
@@ -88,26 +84,8 @@ class VShootingSignature extends React.Component {
     this.yScale = y
     this.wScale = w
 
-    const colorScale = d3.scaleSequential(d3.interpolatePlasma)
-      .domain([-0.25, 0.25])
-
-    this.colorData = []
-    const stripe = false // set stripe to true to prevent linear gradient fading
-    for (let i = 0; i < this.state.data.length; i++) {
-      const prevData = this.state.data[i - 1]
-      const currData = this.state.data[i]
-      if (stripe && prevData) {
-        this.colorData.push({
-          offset: `${offset(currData.x)}%`,
-          stopColor: colorScale(prevData.colorValue)
-        })
-      }
-      this.colorData.push({
-        offset: `${offset(currData.x)}%`,
-        stopColor: colorScale(currData.colorValue)
-      })
-    }
-    this.areaData = this.formatData(this.state.data)
+    this.areaData = this.formatAreaData(this.state.data)
+    this.calculateGradientData()
   }
 
   componentWillReceiveProps(nextProps) {
@@ -119,7 +97,8 @@ class VShootingSignature extends React.Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    this.areaData = this.formatData(nextState.data)
+    this.areaData = this.formatAreaData(nextState.data)
+    this.calculateGradientData()
   }
 
   getTickValues() {
@@ -203,12 +182,38 @@ class VShootingSignature extends React.Component {
     }
   }
 
-  formatData(data) {
+  formatAreaData(data) {
     return data.map(d => ({
       _x: d.x,
       _y1: d.y + this.wScale(d.widthValue),
       _y0: d.y - this.wScale(d.widthValue)
     }))
+  }
+
+  calculateGradientData() {
+    const offset = d3.scaleLinear()
+      .domain(this.xScale.domain())
+      .range([0, 100])
+
+    const colorScale = d3.scaleSequential(d3.interpolatePlasma)
+      .domain([-0.35, 0.35])
+
+    this.colorData = []
+    const stripe = true // set stripe to true to prevent linear gradient fading
+    for (let i = 0; i < this.state.data.length; i++) {
+      const prevData = this.state.data[i - 1]
+      const currData = this.state.data[i]
+      if (stripe && prevData) {
+        this.colorData.push({
+          offset: `${offset(currData.x)}%`,
+          stopColor: colorScale(prevData.colorValue)
+        })
+      }
+      this.colorData.push({
+        offset: `${offset(currData.x)}%`,
+        stopColor: colorScale(currData.colorValue)
+      })
+    }
   }
 
   render() {
