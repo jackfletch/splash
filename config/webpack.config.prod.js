@@ -57,7 +57,8 @@ module.exports = {
       paths.appIndexJs
     ],
     vendor: [
-      'd3',
+      'd3-scale',
+      'd3-hexbin',
       'prop-types',
       'react',
       'react-dom'

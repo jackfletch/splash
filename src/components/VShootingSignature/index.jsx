@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import * as d3 from 'd3'
+import * as d3Shape from 'd3-shape'
+import * as d3Scale from 'd3-scale'
 import styled from 'styled-components'
 import { VictoryArea, VictoryAxis, VictoryChart, VictoryContainer, VictoryLabel } from 'victory'
 
@@ -77,28 +78,28 @@ class VShootingSignature extends React.Component {
 
     this.backgroundColor = '#dddddd'
 
-    const x = d3.scaleLinear()
+    const x = d3Scale.scaleLinear()
       .domain([0, this.state.maxDistance])
       .range([0, this.width])
 
-    const y = d3.scaleLinear()
+    const y = d3Scale.scaleLinear()
       .domain([0, 1])
       .range([this.height, 0])
 
-    const w = d3.scaleLinear()
+    const w = d3Scale.scaleLinear()
       .domain([0, this.height])
       .range([0, 0.4])
 
-    this.areaAbove = d3.area()
+    this.areaAbove = d3Shape.area()
       .x(d => x(d.x))
       .y0(d => y(d.y) - w(d.widthValue))
       .y1(d => Math.ceil(y(d.y))) // ceil and floor prevent line between areas
-      .curve(d3.curveBasis)
-    this.areaBelow = d3.area()
+      .curve(d3Shape.curveBasis)
+    this.areaBelow = d3Shape.area()
       .x(d => x(d.x))
       .y0(d => y(d.y) + w(d.widthValue))
       .y1(d => Math.floor(y(d.y))) // ceil and floor prevent line between areas
-      .curve(d3.curveBasis)
+      .curve(d3Shape.curveBasis)
     this.xScale = x
     this.yScale = y
     this.wScale = w
@@ -214,11 +215,11 @@ class VShootingSignature extends React.Component {
   }
 
   calculateGradientData() {
-    const offset = d3.scaleLinear()
+    const offset = d3Scale.scaleLinear()
       .domain(this.findDomain())
       .range([0, 100])
 
-    const colorScale = d3.scaleSequential(d3.interpolatePlasma)
+    const colorScale = d3Scale.scaleSequential(d3Scale.interpolatePlasma)
       .domain([-0.35, 0.35])
 
     this.colorData = []

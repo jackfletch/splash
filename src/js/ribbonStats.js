@@ -1,4 +1,4 @@
-import { sum } from 'd3'
+import { sum } from 'd3-array'
 
 export function calcRibbonStats(data, maxDistance) {
   const binnedShots = {}

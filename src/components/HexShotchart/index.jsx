@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import * as d3 from 'd3'
+import * as d3Scale from 'd3-scale'
 import { hexbin } from 'd3-hexbin'
 
 import Court from '../Court'
@@ -55,8 +55,8 @@ class ShotChart extends React.Component {
     this.backgroundColor = '#ddd'
     this.hexbinSize = 10
 
-    this.xScale = d3.scaleLinear().domain([-250, 250]).range([0, this.width])
-    this.yScale = d3.scaleLinear().domain([-52.5, 417.5]).range([this.height, 0])
+    this.xScale = d3Scale.scaleLinear().domain([-250, 250]).range([0, this.width])
+    this.yScale = d3Scale.scaleLinear().domain([-52.5, 417.5]).range([this.height, 0])
   }
 
   componentWillReceiveProps(nextProps) {
@@ -79,11 +79,11 @@ class ShotChart extends React.Component {
   }
 
   render() {
-    const radius = d3.scaleSqrt()
+    const radius = d3Scale.scaleSqrt()
       .domain([0, 50])
       .range([0, 10])
 
-    const color = d3.scaleSequential(d3.interpolatePlasma)
+    const color = d3Scale.scaleSequential(d3Scale.interpolatePlasma)
       .domain([0, 1])
 
     const points = this.state.data.map(shot => [shot.x, shot.y, shot.made_flag])
@@ -137,7 +137,6 @@ class ShotChart extends React.Component {
                 cy={this.yScale(0)}
                 rx={this.xScale((this.props.hover.distance + 0.5) * 10) - this.xScale(0)}
                 ry={this.yScale(0) - this.yScale((this.props.hover.distance + 0.5) * 10)}
-                style={this.props.hover.toggle ? null : { display: 'none' }}
                 strokeWidth={10}
                 fill="none"
                 stroke={'rgba(0, 0, 0, 0.2)'}
