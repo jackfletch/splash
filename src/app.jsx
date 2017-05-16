@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import ChartDashboard from './containers/ChartDashboard'
+import Footer from './containers/Footer'
 
 const Div = styled.div`
   padding: 0 2em
@@ -29,6 +30,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
           <li>style everything</li>
         </Ul>
         <ChartDashboard id="chartdashboard" />
+        <Footer />
       </Div>
     )
   }
