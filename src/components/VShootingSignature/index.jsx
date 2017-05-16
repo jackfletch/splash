@@ -2,20 +2,39 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import * as d3 from 'd3'
 import styled from 'styled-components'
-import { VictoryArea, VictoryAxis, VictoryChart, VictoryLabel } from 'victory'
+import { VictoryArea, VictoryAxis, VictoryChart, VictoryContainer, VictoryLabel } from 'victory'
 
 import MyWrapper from './Wrapper'
+import theme from './../victorytheme'
 
 const Div = styled.div`
   flex: 1
   box-sizing: border-box
   background-color: #7e8000
   display: flex
+  flex-direction: column
   align-self: stretch
   align-items: center
   height: auto
   width: 100%
-  min-width: 25rem;
+  min-width: 25rem
+`
+const Div2 = styled.div`
+  flex: 1
+  box-sizing: border-box
+  display: flex
+  align-self: stretch
+  align-items: center
+  height: auto
+  width: 100%
+  padding: 1em
+`
+
+const ChartTitle = styled.h3`
+  color: black;
+  font-size: 1.75em
+  font-weight: normal
+  margin-bottom: 0
 `
 
 const Cursor = props => (
@@ -114,10 +133,8 @@ class VShootingSignature extends React.Component {
         boxSizing: 'border-box',
         display: 'inline',
         padding: 0,
-        margin: 20,
-        fontFamily: "'Fira Sans', sans-serif",
         width: '100%',
-        height: 'auto'
+        height: '100%'
       },
       title: {
         textAnchor: 'start',
@@ -226,40 +243,53 @@ class VShootingSignature extends React.Component {
     const styles = this.getStyles()
     const tickValues = this.getTickValues()
     const gradientId = 'signaturegradient'
-
     return (
       <Div>
-        <VictoryChart
-          domain={{ x: [0, this.state.maxDistance], y: [0, 1.2] }}
-          style={{ parent: styles.parent }}
-        >
-          <MyWrapper colorData={this.colorData} gradientId={gradientId} >
-            <VictoryArea
-              standalone={false}
-              data={this.areaData}
-              interpolation={'basis'}
-              style={{ data: { fill: `url(#${gradientId})` } }}
+        <ChartTitle>Shooting Signature</ChartTitle>
+        <Div2>
+          <VictoryChart
+            containerComponent={<VictoryContainer title="Shooting Signature" />}
+            domain={{ x: [0, this.state.maxDistance], y: [0, 1] }}
+            style={{ parent: styles.parent }}
+            theme={theme}
+          >
+            <VictoryLabel
+              text="Shooting Signature"
+              dx={'50%'}
+              y={10}
+              textAnchor="middle"
+              verticalAnchor="start"
+              style={{ fontSize: 24 }}
+              theme={theme}
             />
-          </MyWrapper>
-          <VictoryAxis
-            scale="linear"
-            standalone={false}
-            style={styles.axisX}
-            tickValues={tickValues}
-          />
-          <VictoryAxis
-            dependentAxis
-            orientation="left"
-            standalone={false}
-            style={styles.axisOne}
-            tickFormat={d => `${(100 * d).toFixed(0)}%`}
-            tickLabelComponent={<VictoryLabel dx={7} />}
-          />
-          {this.state.hover.toggle ?
-            <Cursor x={this.state.hover.distance} /> :
+            <MyWrapper colorData={this.colorData} gradientId={gradientId} >
+              <VictoryArea
+                standalone={false}
+                data={this.areaData}
+                interpolation={'basis'}
+                style={{ data: { fill: `url(#${gradientId})` } }}
+              />
+            </MyWrapper>
+            <VictoryAxis
+              scale="linear"
+              standalone={false}
+              style={styles.axisX}
+              tickValues={tickValues}
+            />
+            <VictoryAxis
+              dependentAxis
+              orientation="left"
+              standalone={false}
+              style={styles.axisOne}
+              tickFormat={d => `${(100 * d).toFixed(0)}%`}
+              tickLabelComponent={<VictoryLabel dx={7} />}
+            />
+            {this.state.hover.toggle ?
+              <Cursor x={this.state.hover.distance} /> :
             null
           }
-        </VictoryChart>
+          </VictoryChart>
+        </Div2>
       </Div>
     )
   }

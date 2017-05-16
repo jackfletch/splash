@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-
 import { VictoryChart, VictoryAxis, VictoryLabel, VictoryLine, VictoryVoronoiContainer } from 'victory'
 
+import theme from './../victorytheme'
 
 /* eslint-disable */
 const Div = styled.div`
@@ -11,11 +11,29 @@ const Div = styled.div`
   box-sizing: border-box
   background-color: #5f7a00
   display: flex
+  flex-direction: column
   align-self: stretch
   align-items: center
   height: auto
   width: 100%
   min-width: 25rem
+`
+const Div2 = styled.div`
+  flex: 1
+  box-sizing: border-box
+  display: flex
+  align-self: stretch
+  align-items: center
+  height: auto
+  width: 100%
+  padding: 1em
+`
+
+const ChartTitle = styled.h3`
+  color: black;
+  font-size: 1.75em
+  font-weight: normal
+  margin-bottom: 0
 `
 
 const Cursor = ({ x, y, datum, totalShots}) => {
@@ -74,8 +92,6 @@ class LineChart extends Component {
         boxSizing: 'border-box',
         display: 'inline',
         padding: 0,
-        margin: 20,
-        fontFamily: "'Fira Sans', sans-serif",
         width: '100%',
         height: 'auto'
       },
@@ -174,65 +190,76 @@ class LineChart extends Component {
     }
   }
 
+  findMaxY() {
+    const max_shots = Math.max.apply(Math, this.state.data.binData.map(d => d.y))
+    const max_pct = max_shots * 100 / this.state.data.totalShots
+    return Math.ceil(max_pct / 5) * 5 
+  }
+
   render() {
     const data = this.state.data.binData
     const tickValues = this.getTickValues()
     const styles = this.getStyles()
+    const maxY = this.findMaxY()
 
     return (
       <Div>
-        <VictoryChart
-          containerComponent={
-            <VictoryVoronoiContainer
-              dimension="x"
-              labels={d => `shot freq %: ${((100 * d.y) / this.state.data.totalShots).toFixed(2)}%`}
-              labelComponent={<Cursor totalShots={this.state.data.totalShots}/>}
-              onActivated={(points) => {
-                this.updateActivated(points[0].x)
-              }}
-              onDeactivated={(points) => {
-                if (points.length) {
-                  this.updateDeactivated(points[0].x)
-                }
-              }}
-              events={{onMouseOut: (evt) => {
-                if (!this.state.hover.toggle) {
-                  this.updateActivated(-15)
-                  this.updateDeactivated(-15)
-                }
-              }}}
+        <ChartTitle>Shot Frequency by Distance</ChartTitle>
+        <Div2>
+          <VictoryChart
+            containerComponent={
+              <VictoryVoronoiContainer
+                dimension="x"
+                labels={d => `shot freq %: ${((100 * d.y) / this.state.data.totalShots).toFixed(2)}%`}
+                labelComponent={<Cursor totalShots={this.state.data.totalShots}/>}
+                onActivated={(points) => {
+                  this.updateActivated(points[0].x)
+                }}
+                onDeactivated={(points) => {
+                  if (points.length) {
+                    this.updateDeactivated(points[0].x)
+                  }
+                }}
+                events={{onMouseOut: (evt) => {
+                  if (!this.state.hover.toggle) {
+                    this.updateActivated(-15)
+                    this.updateDeactivated(-15)
+                  }
+                }}}
+              />
+            }
+            theme={theme}
+            style={{ parent: styles.parent }}
+          >
+            <VictoryAxis
+              scale="linear"
+              standalone={false}
+              style={styles.axisX}
+              tickValues={tickValues}
+              tickLabelComponent={<VictoryLabel dy={-0.5}/>}
             />
-          }
-          style={{ parent: styles.parent }}
-        >
-          <VictoryAxis
-            scale="linear"
-            standalone={false}
-            style={styles.axisX}
-            tickValues={tickValues}
-            tickLabelComponent={<VictoryLabel dy={-0.5}/>}
-          />
-          <VictoryAxis
-            dependentAxis
-            domain={[0, 25]}
-            orientation="left"
-            standalone={false}
-            style={styles.axisOne}
-            tickLabelComponent={<VictoryLabel dx={5} />}
-          />
-          <VictoryLine
-            data={data}
-            y={d => (100 * d.y) / this.state.data.totalShots}
-            domain={{
-              x: [0, this.state.maxDistance],
-              y: [0, 1]
-            }}
-            interpolation="monotoneX"
-            scale={{ x: 'linear', y: 'linear' }}
-            standalone={false}
-            style={styles.lineOne}
-          />
-        </VictoryChart>
+            <VictoryAxis
+              dependentAxis
+              domain={[0, maxY]}
+              orientation="left"
+              standalone={false}
+              style={styles.axisOne}
+              tickLabelComponent={<VictoryLabel dx={5} />}
+            />
+            <VictoryLine
+              data={data}
+              y={d => (100 * d.y) / this.state.data.totalShots}
+              domain={{
+                x: [0, this.state.maxDistance],
+                y: [0, 1]
+              }}
+              interpolation="monotoneX"
+              scale={{ x: 'linear', y: 'linear' }}
+              standalone={false}
+              style={styles.lineOne}
+            />
+          </VictoryChart>
+        </Div2>
       </Div>
     )
   }
