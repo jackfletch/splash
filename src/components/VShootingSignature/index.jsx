@@ -190,16 +190,22 @@ class VShootingSignature extends React.Component {
     }))
   }
 
+  findDomain() {
+    const maxX = Math.max(...this.state.data.map(d => d.x))
+    const minX = Math.min(...this.state.data.map(d => d.x))
+    return [minX, maxX]
+  }
+
   calculateGradientData() {
     const offset = d3.scaleLinear()
-      .domain(this.xScale.domain())
+      .domain(this.findDomain())
       .range([0, 100])
 
     const colorScale = d3.scaleSequential(d3.interpolatePlasma)
       .domain([-0.35, 0.35])
 
     this.colorData = []
-    const stripe = true // set stripe to true to prevent linear gradient fading
+    const stripe = false // set stripe to true to prevent linear gradient fading
     for (let i = 0; i < this.state.data.length; i++) {
       const prevData = this.state.data[i - 1]
       const currData = this.state.data[i]

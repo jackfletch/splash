@@ -60,6 +60,7 @@ export function calcRibbonStats(data, maxDistance) {
     } else {
       binData[i].y = sum(tempArray) / 256
     }
+    binData[i].colorValue = binData[i].y - avgShootingPct
   }
 
   return binData
