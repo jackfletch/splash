@@ -61,7 +61,7 @@ export function calcRibbonStats(data, maxDistance) {
   const shootingPctArray = []
   Object.keys(binnedShots).forEach((bin) => {
     const shots = binnedShots[bin]
-    const shootingPct = shots.reduce((a, b) => a + b.made_flag, 0) / shots.length
+    const shootingPct = shots.reduce((a, b) => b.made_flag ? a + 1 : a, 0) / shots.length
     const width = (40 * shots.length) / (totalShots / 30)
     binData.push({ x: parseInt(bin), y: shootingPct, widthValue: width, colorValue: shootingPct - (avgShootingPct[parseInt(bin)] / 100) })
     shootingPctArray.push(shootingPct)
@@ -80,13 +80,13 @@ export function calcRibbonStats(data, maxDistance) {
       shootingPctArray[i + 4]
     ]
     if (i === 0) {
-      binData[i].y = sum(tempArray.slice(3)) / 163
+      binData[i].y = binData[i].y
     } else if (i === 1) {
-      binData[i].y = sum(tempArray.slice(2)) / 219
+      binData[i].y = binData[i].y
     } else if (i === 2) {
-      binData[i].y = sum(tempArray.slice(2)) / 247
+      binData[i].y = binData[i].y
     } else if (i === 3) {
-      binData[i].y = sum(tempArray.slice(1)) / 255
+      binData[i].y = binData[i].y
     } else if (i === binData.length - 4) {
       binData[i].y = sum(tempArray.slice(0, -1)) / 255
     } else if (i === binData.length - 3) {
