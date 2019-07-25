@@ -63,7 +63,7 @@ export default class ChartDashboard extends React.Component {
   }
 
   getPlayers() {
-    axios.get('http://jackfletch.com/api/players')
+    axios.get('https://splash.jackfletch.com/api/players')
       .then((response) => {
         this.setPlayers(response.data)
       })
@@ -71,7 +71,7 @@ export default class ChartDashboard extends React.Component {
 
   getShots(playerId) {
     this.setRendering(true)
-    axios.get(`http://jackfletch.com/api/shots/${playerId}`)
+    axios.get(`https://splash.jackfletch.com/api/shots/${playerId}`)
       .then((response) => {
         this.setData(response.data)
         this.setRendering(false)

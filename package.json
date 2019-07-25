@@ -63,7 +63,7 @@
     "webpack-manifest-plugin": "1.1.0",
     "whatwg-fetch": "2.0.2"
   },
-  "homepage": "http://jackfletch.com/splash",
+  "homepage": "https://splash.jackfletch.com/",
   "eslintConfig": {
     "parser": "babel-eslint",
     "extends": "airbnb",
