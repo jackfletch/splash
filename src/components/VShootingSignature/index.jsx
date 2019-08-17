@@ -249,6 +249,24 @@ class VShootingSignature extends React.Component {
       <Div>
         <ChartTitle>Shooting Signature</ChartTitle>
         <Div2>
+          <div
+            className="signature-explanation-toggle"
+            style={{
+              position: 'absolute',
+              borderRadius: '50%',
+              right: '2em',
+              top: '2em',
+              width: 16,
+              height: 16,
+              backgroundColor: '#eee',
+              color: '#aaa',
+              textAlign: 'center',
+              cursor: 'help'
+            }}
+          >
+            ?
+            <img src="https://raw.githubusercontent.com/d3/d3-scale-chromatic/master/img/plasma.png" alt="signature explanation" className="signature-explanation" />
+          </div>
           <VictoryChart
             containerComponent={<VictoryContainer title="Shooting Signature" />}
             domain={{ x: [0, this.state.maxDistance], y: [0, 1] }}
