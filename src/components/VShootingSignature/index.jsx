@@ -30,6 +30,7 @@ const Div2 = styled.div`
   height: auto
   width: 100%
   padding: 1em
+  position: relative
 `
 
 const ChartTitle = styled.h3`
@@ -221,7 +222,7 @@ class VShootingSignature extends React.Component {
       .range([0, 100])
 
     const colorScale = d3Scale.scaleSequential(d3Scale.interpolatePlasma)
-      .domain([-0.35, 0.35])
+      .domain([-0.25, 0.25])
 
     this.colorData = []
     const stripe = false // set stripe to true to prevent linear gradient fading
@@ -268,10 +269,11 @@ class VShootingSignature extends React.Component {
             <img src="https://raw.githubusercontent.com/d3/d3-scale-chromatic/master/img/plasma.png" alt="signature explanation" className="signature-explanation" />
           </div>
           <VictoryChart
-            containerComponent={<VictoryContainer title="Shooting Signature" />}
+            containerComponent={<VictoryContainer />}
             domain={{ x: [0, this.state.maxDistance], y: [0, 1] }}
             style={{ parent: styles.parent }}
             theme={theme}
+            padding={{ top: 20, bottom: 100, left: 50, right: 50 }}
           >
             <VictoryLabel
               text="Shooting Signature"
