@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import { VictoryArea, VictoryAxis, VictoryChart, VictoryContainer, VictoryLabel } from 'victory'
 
 import Gradient from './Gradient'
+import Legend from './Legend'
 import theme from './../victorytheme'
 
 const Div = styled.div`
@@ -262,6 +263,12 @@ class VShootingSignature extends React.Component {
               verticalAnchor="start"
               style={{ fontSize: 24 }}
               theme={theme}
+            />
+            <Legend
+              x={250}
+              y={255}
+              imgWidth={150}
+              imgHeight={10}
             />
             <Gradient colorData={this.colorData} gradientId={gradientId} >
               <VictoryArea
