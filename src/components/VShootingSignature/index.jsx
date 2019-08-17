@@ -5,7 +5,7 @@ import * as d3Scale from 'd3-scale'
 import styled from 'styled-components'
 import { VictoryArea, VictoryAxis, VictoryChart, VictoryContainer, VictoryLabel } from 'victory'
 
-import MyWrapper from './Wrapper'
+import Gradient from './Gradient'
 import theme from './../victorytheme'
 
 const Div = styled.div`
@@ -263,14 +263,14 @@ class VShootingSignature extends React.Component {
               style={{ fontSize: 24 }}
               theme={theme}
             />
-            <MyWrapper colorData={this.colorData} gradientId={gradientId} >
+            <Gradient colorData={this.colorData} gradientId={gradientId} >
               <VictoryArea
                 standalone={false}
                 data={this.areaData}
                 interpolation={'basis'}
                 style={{ data: { fill: `url(#${gradientId})` } }}
               />
-            </MyWrapper>
+            </Gradient>
             <VictoryAxis
               scale="linear"
               standalone={false}
