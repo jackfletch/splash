@@ -1,6 +1,6 @@
 import {sum} from 'd3-array';
 
-export function calcRibbonStats(data, maxDistance) {
+export function ribbonShots(data, maxDistance) {
   const binnedShots = {};
   let totalMakes = 0;
   let totalShots = data.length;

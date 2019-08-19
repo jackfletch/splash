@@ -10,7 +10,7 @@ import VShootingSignature from '../../components/VShootingSignature';
 import LineChart from '../../components/LineChart';
 
 import {binShots} from '../../lib/binShots';
-import {calcRibbonStats} from '../../lib/ribbonStats';
+import {ribbonShots} from '../../lib/ribbonShots';
 
 const Title = styled.h1`
   color: midnightblue;
@@ -81,7 +81,7 @@ export default class ChartDashboard extends React.Component {
   setData(e) {
     this.setState(prevState => ({
       data: e,
-      ribbonedData: calcRibbonStats(e, prevState.maxDistance),
+      ribbonedData: ribbonShots(e, prevState.maxDistance),
       binnedData: binShots(e, prevState.maxDistance),
     }));
   }
