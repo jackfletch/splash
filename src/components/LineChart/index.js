@@ -214,7 +214,7 @@ class LineChart extends Component {
           <VictoryChart
             containerComponent={
               <VictoryVoronoiContainer
-                dimension="x"
+                voronoiDimension="x"
                 labels={d =>
                   `shot freq %: ${((100 * d.y) / data.totalShots).toFixed(2)}%`
                 }
