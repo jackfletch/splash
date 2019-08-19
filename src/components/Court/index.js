@@ -1,90 +1,120 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
+import PropTypes from 'prop-types';
 
 function Court(props) {
-  const xScale = props.scale.x
-  const yScale = props.scale.y
+  const {height, lineColor, scale, strokeWidth, width} = props;
   const dThreePointLine = [
-    'M', xScale(-220), yScale(-52.5),
-    'L', xScale(-220), yScale(89.47765),
-    'C', xScale(-184.71), yScale(176.29), xScale(-99.5), yScale(237.5), xScale(0), yScale(237.5),
-    'S', xScale(184.71), yScale(176.29), xScale(220), yScale(89.47765),
-    'L', xScale(220), yScale(-52.5)
-  ].join(' ')
+    'M',
+    scale.x(-220),
+    scale.y(-52.5),
+    'L',
+    scale.x(-220),
+    scale.y(89.47765),
+    'C',
+    scale.x(-184.71),
+    scale.y(176.29),
+    scale.x(-99.5),
+    scale.y(237.5),
+    scale.x(0),
+    scale.y(237.5),
+    'S',
+    scale.x(184.71),
+    scale.y(176.29),
+    scale.x(220),
+    scale.y(89.47765),
+    'L',
+    scale.x(220),
+    scale.y(-52.5),
+  ].join(' ');
 
   const arcPoints = {
-    sx: xScale(-60),
-    sy: yScale(137.5),
-    x: xScale(60),
-    y: yScale(137.5),
-    rx: xScale(0) - xScale(60),
-    ry: yScale(60) - yScale(0),
+    sx: scale.x(-60),
+    sy: scale.y(137.5),
+    x: scale.x(60),
+    y: scale.y(137.5),
+    rx: scale.x(0) - scale.x(60),
+    ry: scale.y(60) - scale.y(0),
     large_arc_flag: 0,
-    sweep_flag: 1
-  }
+    sweep_flag: 1,
+  };
   const dTopFreeThrowArc = [
-    'M', arcPoints.sx, arcPoints.sy,
-    'A', arcPoints.rx, arcPoints.ry, 0, arcPoints.large_arc_flag, arcPoints.sweep_flag, arcPoints.x, arcPoints.y
-  ].join(' ')
+    'M',
+    arcPoints.sx,
+    arcPoints.sy,
+    'A',
+    arcPoints.rx,
+    arcPoints.ry,
+    0,
+    arcPoints.large_arc_flag,
+    arcPoints.sweep_flag,
+    arcPoints.x,
+    arcPoints.y,
+  ].join(' ');
   const dBottomFreeThrowArc = [
-    'M', arcPoints.sx, arcPoints.sy,
-    'A', arcPoints.rx, arcPoints.ry, 0, arcPoints.large_arc_flag, 0, arcPoints.x, arcPoints.y
-  ].join(' ')
+    'M',
+    arcPoints.sx,
+    arcPoints.sy,
+    'A',
+    arcPoints.rx,
+    arcPoints.ry,
+    0,
+    arcPoints.large_arc_flag,
+    0,
+    arcPoints.x,
+    arcPoints.y,
+  ].join(' ');
 
   const restrictedArcPoints = {
-    sx: xScale(-40),
-    sy: yScale(0),
-    x: xScale(40),
-    y: yScale(0),
-    rx: xScale(0) - xScale(40),
-    ry: yScale(40) - yScale(0),
+    sx: scale.x(-40),
+    sy: scale.y(0),
+    x: scale.x(40),
+    y: scale.y(0),
+    rx: scale.x(0) - scale.x(40),
+    ry: scale.y(40) - scale.y(0),
     large_arc_flag: 0,
-    sweep_flag: 1
-  }
+    sweep_flag: 1,
+  };
 
   const dRestrictedArc = [
-    'M', restrictedArcPoints.sx, restrictedArcPoints.sy,
-    'A', restrictedArcPoints.rx, restrictedArcPoints.ry, 0, restrictedArcPoints.large_arc_flag, 1, restrictedArcPoints.x, restrictedArcPoints.y
-  ].join(' ')
+    'M',
+    restrictedArcPoints.sx,
+    restrictedArcPoints.sy,
+    'A',
+    restrictedArcPoints.rx,
+    restrictedArcPoints.ry,
+    0,
+    restrictedArcPoints.large_arc_flag,
+    1,
+    restrictedArcPoints.x,
+    restrictedArcPoints.y,
+  ].join(' ');
 
   const lines = [
-    [{ x: 60, y: 137.5 },
-      { x: 60, y: -52.5 }],
-    [{ x: -60, y: 137.5 },
-      { x: -60, y: -52.5 }],
-    [{ x: 80, y: 0 },
-      { x: 90, y: 0 }],
-    [{ x: 80, y: 116 },
-      { x: 90, y: 116 }],
-    [{ x: 80, y: 86 },
-      { x: 90, y: 86 }],
-    [{ x: 80, y: 52.5 },
-      { x: 90, y: 52.5 }],
-    [{ x: 80, y: 41 },
-      { x: 90, y: 41 }],
-    [{ x: -80, y: 0 },
-      { x: -90, y: 0 }],
-    [{ x: -80, y: 116 },
-      { x: -90, y: 116 }],
-    [{ x: -80, y: 86 },
-      { x: -90, y: 86 }],
-    [{ x: -80, y: 52.5 },
-      { x: -90, y: 52.5 }],
-    [{ x: -80, y: 41 },
-      { x: -90, y: 41 }]
-  ]
+    [{x: 60, y: 137.5}, {x: 60, y: -52.5}],
+    [{x: -60, y: 137.5}, {x: -60, y: -52.5}],
+    [{x: 80, y: 0}, {x: 90, y: 0}],
+    [{x: 80, y: 116}, {x: 90, y: 116}],
+    [{x: 80, y: 86}, {x: 90, y: 86}],
+    [{x: 80, y: 52.5}, {x: 90, y: 52.5}],
+    [{x: 80, y: 41}, {x: 90, y: 41}],
+    [{x: -80, y: 0}, {x: -90, y: 0}],
+    [{x: -80, y: 116}, {x: -90, y: 116}],
+    [{x: -80, y: 86}, {x: -90, y: 86}],
+    [{x: -80, y: 52.5}, {x: -90, y: 52.5}],
+    [{x: -80, y: 41}, {x: -90, y: 41}],
+  ];
 
   return (
     <g className="court">
       {/* border */}
       <rect
-        x={xScale(-250)}
-        y={yScale(417.5)}
-        width={xScale(250) - xScale(-250)}
-        height={yScale(-52.5) - yScale(417.5)}
+        x={scale.x(-250)}
+        y={scale.y(417.5)}
+        width={scale.x(250) - scale.x(-250)}
+        height={scale.y(-52.5) - scale.y(417.5)}
         fill="none"
-        stroke={props.lineColor}
-        strokeWidth={props.strokeWidth}
+        stroke={lineColor}
+        strokeWidth={strokeWidth}
         strokeLinejoin="milter"
         strokeMiterlimit={10}
       />
@@ -92,45 +122,45 @@ function Court(props) {
       <path
         d={dThreePointLine}
         fill="none"
-        stroke={props.lineColor}
-        strokeWidth={props.strokeWidth}
+        stroke={lineColor}
+        strokeWidth={strokeWidth}
         strokeLinecap="join"
         strokeLinejoin="milter"
         strokeMiterlimit={10}
       />
       {/* paint */}
       <rect
-        x={xScale(-80)}
-        y={yScale(137.5)}
-        width={xScale(160) - xScale(0)}
-        height={yScale(0) - yScale(190)}
+        x={scale.x(-80)}
+        y={scale.y(137.5)}
+        width={scale.x(160) - scale.x(0)}
+        height={scale.y(0) - scale.y(190)}
         fill="none"
-        stroke={props.lineColor}
-        strokeWidth={props.strokeWidth}
+        stroke={lineColor}
+        strokeWidth={strokeWidth}
         strokeLinejoin="milter"
         strokeMiterlimit={10}
       />
       {/* backboard */}
       <rect
-        x={xScale(-30)}
-        y={yScale(-12.5)}
-        width={xScale(60) - xScale(0)}
-        height={yScale(0) - yScale(5)}
-        fill={props.lineColor}
-        stroke={props.lineColor}
-        strokeWidth={props.strokeWidth}
+        x={scale.x(-30)}
+        y={scale.y(-12.5)}
+        width={scale.x(60) - scale.x(0)}
+        height={scale.y(0) - scale.y(5)}
+        fill={lineColor}
+        stroke={lineColor}
+        strokeWidth={strokeWidth}
         strokeLinejoin="milter"
         strokeMiterlimit={10}
       />
       {/* back of the rim */}
       <rect
-        x={xScale(-2.5)}
-        y={yScale(-9)}
-        width={xScale(5) - xScale(0)}
-        height={yScale(0) - yScale(5)}
-        fill={props.lineColor}
-        stroke={props.lineColor}
-        strokeWidth={props.strokeWidth}
+        x={scale.x(-2.5)}
+        y={scale.y(-9)}
+        width={scale.x(5) - scale.x(0)}
+        height={scale.y(0) - scale.y(5)}
+        fill={lineColor}
+        stroke={lineColor}
+        strokeWidth={strokeWidth}
         strokeLinejoin="milter"
         strokeMiterlimit={10}
       />
@@ -138,8 +168,8 @@ function Court(props) {
       <path
         d={dTopFreeThrowArc}
         fill="none"
-        stroke={props.lineColor}
-        strokeWidth={props.strokeWidth}
+        stroke={lineColor}
+        strokeWidth={strokeWidth}
         strokeLinecap="join"
         strokeLinejoin="milter"
         strokeMiterlimit={10}
@@ -147,8 +177,8 @@ function Court(props) {
       <path
         d={dBottomFreeThrowArc}
         fill="none"
-        stroke={props.lineColor}
-        strokeWidth={props.strokeWidth}
+        stroke={lineColor}
+        strokeWidth={strokeWidth}
         strokeLinecap="join"
         strokeLinejoin="milter"
         strokeMiterlimit={10}
@@ -158,48 +188,49 @@ function Court(props) {
       <path
         d={dRestrictedArc}
         fill="none"
-        stroke={props.lineColor}
-        strokeWidth={props.strokeWidth}
+        stroke={lineColor}
+        strokeWidth={strokeWidth}
         strokeLinecap="join"
         strokeLinejoin="milter"
         strokeMiterlimit={10}
       />
       {/* rim */}
       <ellipse
-        cx={xScale(0)}
-        cy={yScale(0)}
-        rx={xScale(9) - xScale(0)}
-        ry={yScale(0) - yScale(9)}
+        cx={scale.x(0)}
+        cy={scale.y(0)}
+        rx={scale.x(9) - scale.x(0)}
+        ry={scale.y(0) - scale.y(9)}
         fill="none"
-        stroke={props.lineColor}
-        strokeWidth={props.strokeWidth}
+        stroke={lineColor}
+        strokeWidth={strokeWidth}
         strokeMiterlimit={10}
       />
       {/* random lines */}
-      {lines.map(line =>
+      {lines.map(line => (
         <line
-          x1={xScale(line[0].x)}
-          y1={yScale(line[0].y)}
-          x2={xScale(line[1].x)}
-          y2={yScale(line[1].y)}
+          x1={scale.x(line[0].x)}
+          y1={scale.y(line[0].y)}
+          x2={scale.x(line[1].x)}
+          y2={scale.y(line[1].y)}
           fill="none"
-          stroke={props.lineColor}
-          strokeWidth={props.strokeWidth}
+          stroke={lineColor}
+          strokeWidth={strokeWidth}
           strokeLinejoin="milter"
           strokeMiterlimit={10}
-          key={line[0].x.toString() + line[0].y.toString() +
-            line[1].x.toString() + line[1].y.toString()}
-        />)}
+          key={
+            line[0].x.toString() +
+            line[0].y.toString() +
+            line[1].x.toString() +
+            line[1].y.toString()
+          }
+        />
+      ))}
 
       <clipPath id="clip">
-        <rect
-          className="mesh"
-          width={props.width}
-          height={props.height}
-        />
+        <rect className="mesh" width={width} height={height} />
       </clipPath>
     </g>
-  )
+  );
 }
 
 Court.propTypes = {
@@ -207,15 +238,15 @@ Court.propTypes = {
   height: PropTypes.number.isRequired,
   scale: PropTypes.shape({
     x: PropTypes.func,
-    y: PropTypes.func
+    y: PropTypes.func,
   }).isRequired,
   lineColor: PropTypes.string,
-  strokeWidth: PropTypes.number
-}
+  strokeWidth: PropTypes.number,
+};
 
 Court.defaultProps = {
   lineColor: '#aaa',
-  strokeWidth: 1.67
-}
+  strokeWidth: 1.67,
+};
 
-export default Court
+export default Court;

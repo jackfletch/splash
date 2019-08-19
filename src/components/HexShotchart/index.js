@@ -1,12 +1,13 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import * as d3Scale from 'd3-scale'
-import { hexbin } from 'd3-hexbin'
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import {hexbin} from 'd3-hexbin';
+import {scaleLinear, scaleSequential, scaleSqrt} from 'd3-scale';
+import {interpolatePlasma} from 'd3-scale-chromatic';
 
-import Court from '../Court'
-import Hexagon from '../Hexagon'
-import Tooltip from '../Tooltip'
+import Court from '../Court';
+import Hexagon from '../Hexagon';
+import Tooltip from '../Tooltip';
 
 const Div = styled.div`
   flex: 1
@@ -19,7 +20,7 @@ const Div = styled.div`
   width: 100%
   min-width: 25rem;
   z-index: 1
-`
+`;
 
 const Svg = styled.svg`
   display: block;
@@ -27,11 +28,11 @@ const Svg = styled.svg`
   height: auto;
   width: 100%;
   overflow: visible !important;
-`
+`;
 
 class ShotChart extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       data: props.data,
       tooltip: {
@@ -40,29 +41,31 @@ class ShotChart extends React.Component {
         opacity: 0,
         shots: '',
         show: false,
-        transform: ''
-      }
-    }
-    this.updateTooltip = this.updateTooltip.bind(this)
-  }
+        transform: '',
+      },
+    };
+    this.margin = {top: 20, right: 20, bottom: 20, left: 20};
+    this.svgWidth = 540;
+    this.svgHeight = 500;
+    this.width = this.svgWidth - this.margin.left - this.margin.right;
+    this.height = this.svgHeight - this.margin.top - this.margin.bottom;
+    this.backgroundColor = '#ddd';
+    this.hexbinSize = 10;
 
-  componentWillMount() {
-    this.margin = { top: 20, right: 20, bottom: 20, left: 20 }
-    this.svgWidth = 540
-    this.svgHeight = 500
-    this.width = this.svgWidth - this.margin.left - this.margin.right
-    this.height = this.svgHeight - this.margin.top - this.margin.bottom
-    this.backgroundColor = '#ddd'
-    this.hexbinSize = 10
+    this.xScale = scaleLinear()
+      .domain([-250, 250])
+      .range([0, this.width]);
+    this.yScale = scaleLinear()
+      .domain([-52.5, 417.5])
+      .range([this.height, 0]);
 
-    this.xScale = d3Scale.scaleLinear().domain([-250, 250]).range([0, this.width])
-    this.yScale = d3Scale.scaleLinear().domain([-52.5, 417.5]).range([this.height, 0])
+    this.updateTooltip = this.updateTooltip.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      data: nextProps.data
-    })
+      data: nextProps.data,
+    });
   }
 
   updateTooltip(e) {
@@ -73,46 +76,53 @@ class ShotChart extends React.Component {
         opacity: e.opacity,
         shots: e.shots,
         show: e.show,
-        transform: e.transform
-      }
-    })
+        transform: e.transform,
+      },
+    });
   }
 
   render() {
-    const radius = d3Scale.scaleSqrt()
+    const {data, tooltip} = this.state;
+    const {hover} = this.props;
+    const radius = scaleSqrt()
       .domain([0, 50])
-      .range([0, 10])
+      .range([0, 10]);
 
-    const color = d3Scale.scaleSequential(d3Scale.interpolatePlasma)
-      .domain([0, 1])
+    const color = scaleSequential(interpolatePlasma).domain([0, 1]);
 
-    const points = this.state.data.map(shot => [shot.x, shot.y, shot.made_flag])
+    const shots = data.map(shot => [shot.x, shot.y, shot.made_flag]);
 
     const hexbinPath = hexbin()
       .size([this.width, this.height])
-      .radius(this.hexbinSize)
+      .radius(this.hexbinSize);
 
     const scales = {
       x: this.xScale,
-      y: this.yScale
-    }
+      y: this.yScale,
+    };
 
-    const hexagons = hexbinPath(points).map(data =>
+    const hexagons = hexbinPath(shots).map(bin => (
       <Hexagon
-        key={data.x.toString() + data.y.toString()}
+        key={bin.x.toString() + bin.y.toString()}
         color={color}
-        data={data}
+        data={bin}
         hexbinPath={hexbinPath}
         hexbinSize={this.hexbinSize}
         radius={radius}
         scale={scales}
         updateTooltip={this.updateTooltip}
       />
-    )
+    ));
 
     return (
       <Div>
-        <Svg display="block" height="100%" width="100%" viewBox={`0 0 ${this.svgWidth} ${this.svgHeight}`} preserveAspectRatio="xMidYMid meet">
+        <Svg
+          display="block"
+          height="100%"
+          width="100%"
+          viewBox={`0 0 ${this.svgWidth} ${this.svgHeight}`}
+          preserveAspectRatio="xMidYMid meet"
+        >
           <g transform={`translate(${this.margin.left}, ${this.margin.top})`}>
             <rect
               x={this.xScale(-250)}
@@ -122,31 +132,25 @@ class ShotChart extends React.Component {
               fill={this.backgroundColor}
               stroke="none"
             />
-            <g clipPath="url(#clip)">
-              {hexagons}
-            </g>
-            <Court
-              width={this.width}
-              height={this.height}
-              scale={scales}
-            />
-            {(this.props.hover.toggle && this.props.hover.distance >= 0) ?
+            <g clipPath="url(#clip)">{hexagons}</g>
+            <Court width={this.width} height={this.height} scale={scales} />
+            {hover.toggle && hover.distance >= 0 ? (
               <ellipse
                 clipPath="url(#clip)"
                 cx={this.xScale(0)}
                 cy={this.yScale(0)}
-                rx={this.xScale((this.props.hover.distance + 0.5) * 10) - this.xScale(0)}
-                ry={this.yScale(0) - this.yScale((this.props.hover.distance + 0.5) * 10)}
+                rx={this.xScale((hover.distance + 0.5) * 10) - this.xScale(0)}
+                ry={this.yScale(0) - this.yScale((hover.distance + 0.5) * 10)}
                 strokeWidth={10}
                 fill="none"
-                stroke={'rgba(0, 0, 0, 0.2)'}
-              /> : null
-            }
-            {this.state.tooltip.show ? <Tooltip vals={this.state.tooltip} /> : null}
+                stroke="rgba(0, 0, 0, 0.2)"
+              />
+            ) : null}
+            {tooltip.show ? <Tooltip vals={tooltip} /> : null}
           </g>
         </Svg>
       </Div>
-    )
+    );
   }
 }
 
@@ -160,7 +164,7 @@ ShotChart.propTypes = {
   //   }).isRequired
   // ).isRequired,
   data: PropTypes.any.isRequired,
-  hover: PropTypes.object.isRequired
-}
+  hover: PropTypes.object.isRequired,
+};
 
-export default ShotChart
+export default ShotChart;

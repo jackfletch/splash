@@ -1,43 +1,51 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
+import PropTypes from 'prop-types';
 
 class PlayerSelector extends React.Component {
   constructor(props) {
-    super(props)
-    this.state = { player: this.props.player }
+    super(props);
+    this.state = {player: props.player};
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.player !== this.state.player) {
-      this.setState({ player: nextProps.player })
+    const {player} = this.state;
+    if (nextProps.player !== player) {
+      this.setState({player: nextProps.player});
     }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (nextState.player !== this.state.player) {
-      return true
+    const {player} = this.state;
+    if (nextState.player !== player) {
+      return true;
     }
-    return false
+    return false;
   }
 
   render() {
+    const {player} = this.state;
+    const {players, setDataset} = this.props;
     return (
       <form>
-        <label htmlFor="select1">Select</label>
-        <select value={this.state.player} onChange={this.props.setDataset}>
-          {this.props.players.map(d =>
-            <option key={d.id} value={d.id}>{d.name}</option>
-          )}
-        </select>
+        <label htmlFor="select1">
+          Select
+          <select value={player} onChange={setDataset}>
+            {players.map(d => (
+              <option key={d.id} value={d.id}>
+                {d.name}
+              </option>
+            ))}
+          </select>
+        </label>
       </form>
-    )
+    );
   }
 }
 
 PlayerSelector.propTypes = {
   player: PropTypes.number.isRequired,
   players: PropTypes.array.isRequired,
-  setDataset: PropTypes.func.isRequired
-}
+  setDataset: PropTypes.func.isRequired,
+};
 
-export default PlayerSelector
+export default PlayerSelector;

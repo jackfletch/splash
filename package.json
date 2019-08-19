@@ -25,12 +25,17 @@
   },
   "devDependencies": {
     "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-prettier": "^3.1.0",
     "prettier": "^1.18.2"
   },
   "eslintConfig": {
+    "extends": [
+      "airbnb",
+      "prettier",
+      "prettier/react"
+    ],
     "parser": "babel-eslint",
-    "extends": "airbnb",
     "env": {
       "browser": true,
       "node": true,
@@ -38,13 +43,15 @@
       "es6": true
     },
     "plugins": [
-      "react"
+      "react",
+      "prettier"
     ],
     "parserOptions": {
-      "ecmaVersion": 6,
-      "sourceType": "module",
+      "ecmaVersion": 8,
       "ecmaFeatures": {
-        "jsx": true
+        "experimentalObjectRestSpread": true,
+        "impliedStrict": true,
+        "classes": true
       }
     },
     "rules": {
@@ -54,15 +61,8 @@
       ],
       "comma-dangle": [
         "error",
-        "never"
+        "always-multiline"
       ],
-      "import/imports-first": 0,
-      "import/newline-after-import": 0,
-      "import/no-dynamic-require": 0,
-      "import/no-extraneous-dependencies": 0,
-      "import/no-named-as-default": 0,
-      "import/no-unresolved": 2,
-      "import/prefer-default-export": 0,
       "indent": [
         2,
         2,
@@ -70,9 +70,6 @@
           "SwitchCase": 1
         }
       ],
-      "max-len": 0,
-      "newline-per-chained-call": 0,
-      "no-confusing-arrow": 0,
       "no-console": 1,
       "no-plusplus": [
         "error",
@@ -80,15 +77,40 @@
           "allowForLoopAfterthoughts": true
         }
       ],
-      "no-restricted-syntax": 0,
-      "no-use-before-define": 0,
+      "no-unused-vars": [
+        1,
+        {
+          "ignoreSiblings": true,
+          "argsIgnorePattern": "res|next|^err"
+        }
+      ],
+      "object-curly-spacing": [
+        "error",
+        "never"
+      ],
+      "prefer-const": [
+        "error",
+        {
+          "destructuring": "all"
+        }
+      ],
       "prefer-template": 2,
-      "class-methods-use-this": 0,
+      "quotes": [
+        2,
+        "single",
+        {
+          "avoidEscape": true,
+          "allowTemplateLiterals": true
+        }
+      ],
       "radix": [
         "error",
         "as-needed"
       ],
-      "react/forbid-prop-types": 0,
+      "react/destructuring-assignment": [
+        2,
+        "always"
+      ],
       "react/jsx-first-prop-new-line": [
         2,
         "multiline"
@@ -96,14 +118,12 @@
       "react/jsx-filename-extension": 0,
       "react/jsx-no-target-blank": 0,
       "react/no-array-index-key": 1,
-      "react/require-extension": 0,
+      "react/prefer-stateless-function": 2,
       "react/self-closing-comp": 0,
-      "require-yield": 0,
       "semi": [
         2,
-        "never"
-      ],
-      "import/no-webpack-loader-syntax": 0
+        "always"
+      ]
     }
   },
   "babel": {
