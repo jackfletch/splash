@@ -1,4 +1,4 @@
-export function binStats(data, maxDistance) {
+export function binShots(data, maxDistance) {
   const binnedShots = {};
   let totalMakes = 0;
   let totalShots = data.length;
