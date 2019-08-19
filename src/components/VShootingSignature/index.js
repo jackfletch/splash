@@ -119,7 +119,7 @@ const styles = {
 const Cursor = ({scale, x}) => (
   <g>
     <path
-      d={`M${scale.x(x)},250 L${scale.x(x)},50`}
+      d={`M${scale.x(x)},200 L${scale.x(x)},20`}
       style={{strokeWidth: 1, stroke: 'rgba(0, 0, 0, 0.2)'}}
     />
   </g>
@@ -255,28 +255,6 @@ class VShootingSignature extends React.Component {
       <Div>
         <ChartTitle>Shooting Signature</ChartTitle>
         <Div2>
-          <div
-            className="signature-explanation-toggle"
-            style={{
-              position: 'absolute',
-              borderRadius: '50%',
-              right: '2em',
-              top: '2em',
-              width: 16,
-              height: 16,
-              backgroundColor: '#eee',
-              color: '#aaa',
-              textAlign: 'center',
-              cursor: 'help',
-            }}
-          >
-            ?
-            <img
-              src="https://raw.githubusercontent.com/d3/d3-scale-chromatic/master/img/plasma.png"
-              alt="signature explanation"
-              className="signature-explanation"
-            />
-          </div>
           <VictoryChart
             containerComponent={<VictoryContainer />}
             domain={{x: [0, maxDistance], y: [0, 1]}}
@@ -284,15 +262,6 @@ class VShootingSignature extends React.Component {
             theme={theme}
             padding={{top: 20, bottom: 100, left: 50, right: 50}}
           >
-            <VictoryLabel
-              text="Shooting Signature"
-              dx="50%"
-              y={10}
-              textAnchor="middle"
-              verticalAnchor="start"
-              style={{fontSize: 24}}
-              theme={theme}
-            />
             <Legend x={250} y={255} imgWidth={150} imgHeight={10} />
             <Gradient colorData={this.colorData} gradientId={gradientId}>
               <VictoryArea
