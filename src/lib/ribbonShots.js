@@ -1,6 +1,6 @@
 import {sum} from 'd3-array';
 
-export function ribbonShots(data, maxDistance) {
+function ribbonShots(data, maxDistance) {
   const binnedShots = {};
   let totalMakes = 0;
   let totalShots = data.length;
@@ -104,3 +104,5 @@ export function ribbonShots(data, maxDistance) {
   }
   return binData;
 }
+
+export default ribbonShots;

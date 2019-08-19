@@ -1,4 +1,4 @@
-export function binShots(data, maxDistance) {
+function binShots(data, maxDistance) {
   const binnedShots = {};
   let totalMakes = 0;
   let totalShots = data.length;
@@ -36,3 +36,5 @@ export function binShots(data, maxDistance) {
   };
   return binnedData;
 }
+
+export default binShots;

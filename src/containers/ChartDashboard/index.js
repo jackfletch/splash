@@ -9,8 +9,7 @@ import HexShotchart from '../../components/HexShotchart';
 import VShootingSignature from '../../components/VShootingSignature';
 import LineChart from '../../components/LineChart';
 
-import {binShots} from '../../lib/binShots';
-import {ribbonShots} from '../../lib/ribbonShots';
+import {binShots, ribbonShots} from '../../lib';
 
 const Title = styled.h1`
   color: midnightblue;
