@@ -143,11 +143,6 @@ Cursor.propTypes = {
 class VShootingSignature extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      data: props.data,
-      hover: props.hover,
-      maxDistance: props.maxDistance,
-    };
     this.margin = {top: 20, right: 20, bottom: 40, left: 60};
     this.svgWidth = 380;
     this.svgHeight = 240;
@@ -181,26 +176,10 @@ class VShootingSignature extends React.Component {
     this.xScale = x;
     this.yScale = y;
     this.wScale = w;
-
-    this.areaData = this.formatAreaData(props.data);
-    this.calculateGradientData();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      data: nextProps.data,
-      hover: nextProps.hover,
-      maxDistance: nextProps.maxDistance,
-    });
-  }
-
-  componentWillUpdate(nextProps, nextState) {
-    this.areaData = this.formatAreaData(nextState.data);
-    this.calculateGradientData();
   }
 
   getTickValues() {
-    const {maxDistance} = this.state;
+    const {maxDistance} = this.props;
     return Array(Math.ceil(maxDistance / 5 + 1))
       .fill()
       .map((val, i) => i * 5);
@@ -215,40 +194,43 @@ class VShootingSignature extends React.Component {
   }
 
   findDomain() {
-    const {data} = this.state;
+    const {data} = this.props;
     const maxX = Math.max(...data.map(d => d.x));
     const minX = Math.min(...data.map(d => d.x));
     return [minX, maxX];
   }
 
-  calculateGradientData() {
-    const {data} = this.state;
+  calculateGradientData(data) {
     const offset = scaleLinear()
       .domain(this.findDomain())
       .range([0, 100]);
 
     const colorScale = scaleSequential(interpolatePlasma).domain([-0.25, 0.25]);
 
-    this.colorData = [];
+    const colorData = [];
     const stripe = false; // set stripe to true to prevent linear gradient fading
     for (let i = 0; i < data.length; i++) {
       const prevData = data[i - 1];
       const currData = data[i];
       if (stripe && prevData) {
-        this.colorData.push({
+        colorData.push({
           offset: `${offset(currData.x)}%`,
           stopColor: colorScale(prevData.colorValue),
         });
       }
-      this.colorData.push({
+      colorData.push({
         offset: `${offset(currData.x)}%`,
         stopColor: colorScale(currData.colorValue),
       });
     }
+    return colorData;
   }
 
   render() {
-    const {hover, maxDistance} = this.state;
+    const {data, hover, maxDistance} = this.props;
+    const areaData = this.formatAreaData(data);
+    const colorData = this.calculateGradientData(data);
+
     const tickValues = this.getTickValues();
     const gradientId = 'signaturegradient';
     return (
@@ -263,10 +245,10 @@ class VShootingSignature extends React.Component {
             padding={{top: 20, bottom: 100, left: 50, right: 50}}
           >
             <Legend x={250} y={255} imgWidth={150} imgHeight={10} />
-            <Gradient colorData={this.colorData} gradientId={gradientId}>
+            <Gradient colorData={colorData} gradientId={gradientId}>
               <VictoryArea
                 standalone={false}
-                data={this.areaData}
+                data={areaData}
                 interpolation="basis"
                 style={{data: {fill: `url(#${gradientId})`}}}
               />
