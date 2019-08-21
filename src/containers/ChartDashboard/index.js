@@ -48,8 +48,8 @@ export default class ChartDashboard extends React.Component {
       ribbonedData: [],
     };
     this.setDataset = this.setDataset.bind(this);
-    this.updateActivated = this.updateActivated.bind(this);
-    this.updateDeactivated = this.updateDeactivated.bind(this);
+    this.setActivated = this.setActivated.bind(this);
+    this.setDeactivated = this.setDeactivated.bind(this);
   }
 
   componentDidMount() {
@@ -98,13 +98,13 @@ export default class ChartDashboard extends React.Component {
     });
   }
 
-  updateActivated(distance) {
+  setActivated(distance) {
     this.setState({
       activated: distance,
     });
   }
 
-  updateDeactivated(distance) {
+  setDeactivated(distance) {
     this.setState({
       deactivated: distance,
     });
@@ -176,8 +176,8 @@ export default class ChartDashboard extends React.Component {
               data={binnedData}
               hover={hover}
               maxDistance={maxDistance}
-              activated={this.updateActivated}
-              deactivated={this.updateDeactivated}
+              setActivated={this.setActivated}
+              setDeactivated={this.setDeactivated}
             />
           </RightChartsDiv>
         </ChartsDiv>
