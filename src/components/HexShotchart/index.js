@@ -34,7 +34,6 @@ class ShotChart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: props.data,
       tooltip: {
         color: 'none',
         makes: '',
@@ -62,12 +61,6 @@ class ShotChart extends React.Component {
     this.updateTooltip = this.updateTooltip.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      data: nextProps.data,
-    });
-  }
-
   updateTooltip(e) {
     this.setState({
       tooltip: {
@@ -82,8 +75,8 @@ class ShotChart extends React.Component {
   }
 
   render() {
-    const {data, tooltip} = this.state;
-    const {hover} = this.props;
+    const {tooltip} = this.state;
+    const {data, hover} = this.props;
     const radius = scaleSqrt()
       .domain([0, 50])
       .range([0, 10]);

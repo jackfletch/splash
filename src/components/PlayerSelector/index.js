@@ -2,29 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 class PlayerSelector extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {player: props.player};
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const {player} = this.state;
-    if (nextProps.player !== player) {
-      this.setState({player: nextProps.player});
-    }
-  }
-
   shouldComponentUpdate(nextProps, nextState) {
-    const {player} = this.state;
-    if (nextState.player !== player) {
+    const {player} = this.props;
+    if (nextProps.player !== player) {
       return true;
     }
     return false;
   }
 
   render() {
-    const {player} = this.state;
-    const {players, setDataset} = this.props;
+    const {player, players, setDataset} = this.props;
     return (
       <form>
         <label htmlFor="select1">
