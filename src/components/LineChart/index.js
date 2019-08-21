@@ -169,12 +169,6 @@ const styles = {
 };
 
 class LineChart extends Component {
-  constructor(props) {
-    super(props);
-    this.updateActivated = props.activated;
-    this.updateDeactivated = props.deactivated;
-  }
-
   getTickValues() {
     const {maxDistance} = this.props;
     return Array(Math.ceil(maxDistance / 5 + 1))
@@ -190,7 +184,7 @@ class LineChart extends Component {
   }
 
   render() {
-    const {data, hover, maxDistance} = this.props;
+    const {data, hover, maxDistance, activated, deactivated} = this.props;
     const tickValues = this.getTickValues();
     const maxY = this.findMaxY();
 
@@ -207,18 +201,18 @@ class LineChart extends Component {
                 }
                 labelComponent={<Cursor totalShots={data.totalShots} />}
                 onActivated={points => {
-                  this.updateActivated(points[0].x);
+                  activated(points[0].x);
                 }}
                 onDeactivated={points => {
                   if (points.length) {
-                    this.updateDeactivated(points[0].x);
+                    deactivated(points[0].x);
                   }
                 }}
                 events={{
                   onMouseOut: () => {
                     if (!hover.toggle) {
-                      this.updateActivated(-15);
-                      this.updateDeactivated(-15);
+                      activated(-15);
+                      deactivated(-15);
                     }
                   },
                 }}
