@@ -57,6 +57,7 @@ class Hexagon extends React.Component {
           }}
           onMouseEnter={this.mouseEnter}
           onMouseLeave={this.mouseLeave}
+          onClick={this.mouseEnter}
         />
       </g>
     );
