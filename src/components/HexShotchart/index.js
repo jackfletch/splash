@@ -18,7 +18,6 @@ const Div = styled.div`
   align-items: center
   height: auto
   width: 100%
-  min-width: 25rem;
   z-index: 1
 `;
 

@@ -5,7 +5,10 @@ import ChartDashboard from './containers/ChartDashboard';
 import Footer from './containers/Footer';
 
 const Div = styled.div`
-  padding: 0 2em;
+  padding: 0 1em;
+  @media only screen and (min-width: 768px) {
+    padding: 0 2em;
+  }
 `;
 const H2 = styled.h2`
   color: midnightblue
