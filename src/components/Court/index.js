@@ -106,18 +106,6 @@ function Court(props) {
 
   return (
     <g className="court">
-      {/* border */}
-      <rect
-        x={scale.x(-250)}
-        y={scale.y(417.5)}
-        width={scale.x(250) - scale.x(-250)}
-        height={scale.y(-52.5) - scale.y(417.5)}
-        fill="none"
-        stroke={lineColor}
-        strokeWidth={strokeWidth}
-        strokeLinejoin="milter"
-        strokeMiterlimit={10}
-      />
       {/* 3pt line */}
       <path
         d={dThreePointLine}
