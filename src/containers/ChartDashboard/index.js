@@ -21,18 +21,6 @@ const ChartsDiv = styled.div`
   align-items: center;
   ${media.tablet`flex-direction: column;`}
 `;
-const RightChartsDiv = styled.div`
-  flex: 1;
-  box-sizing: border-box;
-  background-color: #7e8000;
-  display: flex;
-  flex-wrap: wrap;
-  align-self: stretch;
-  align-items: center;
-  height: auto;
-  width: 100%;
-  ${media.tablet`flex-direction: column;`}
-`;
 
 export default class ChartDashboard extends React.Component {
   constructor(props) {
@@ -166,20 +154,18 @@ export default class ChartDashboard extends React.Component {
         />
         <ChartsDiv>
           <HexShotchart data={data} hover={hover} />
-          <RightChartsDiv>
-            <VShootingSignature
-              data={ribbonedData}
-              hover={hover}
-              maxDistance={maxDistance}
-            />
-            <LineChart
-              data={binnedData}
-              hover={hover}
-              maxDistance={maxDistance}
-              setActivated={this.setActivated}
-              setDeactivated={this.setDeactivated}
-            />
-          </RightChartsDiv>
+          <VShootingSignature
+            data={ribbonedData}
+            hover={hover}
+            maxDistance={maxDistance}
+          />
+          <LineChart
+            data={binnedData}
+            hover={hover}
+            maxDistance={maxDistance}
+            setActivated={this.setActivated}
+            setDeactivated={this.setDeactivated}
+          />
         </ChartsDiv>
       </div>
     );
