@@ -19,14 +19,13 @@ import theme from '../victorytheme';
 const Div = styled.div`
   flex: 1;
   box-sizing: border-box;
-  background-color: #7e8000;
   display: flex;
   flex-direction: column;
   align-self: stretch;
   align-items: center;
   height: auto;
   width: 100%;
-  min-width: 25rem;
+  min-width: 15rem;
 `;
 const Div2 = styled.div`
   flex: 1;
@@ -36,7 +35,6 @@ const Div2 = styled.div`
   align-items: center;
   height: auto;
   width: 100%;
-  padding: 1em;
   position: relative;
 `;
 

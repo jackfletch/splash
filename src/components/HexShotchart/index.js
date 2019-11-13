@@ -12,7 +12,6 @@ import Tooltip from '../Tooltip';
 const Div = styled.div`
   flex: 1;
   box-sizing: border-box;
-  background-color: #807200;
   display: flex;
   align-self: stretch;
   align-items: center;
