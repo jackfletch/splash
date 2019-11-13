@@ -29,9 +29,9 @@ export default class ChartDashboard extends React.Component {
       activated: 0,
       deactivated: 0,
       binnedData: [],
-      dataset: 2544,
       data: undefined,
       maxDistance: 35,
+      playerId: 2544,
       players: this.getPlayers(),
       ribbonedData: [],
     };
@@ -41,8 +41,8 @@ export default class ChartDashboard extends React.Component {
   }
 
   componentDidMount() {
-    const {dataset} = this.state;
-    this.getShots(dataset);
+    const {playerId} = this.state;
+    this.getShots(playerId);
   }
 
   getPlayers() {
@@ -75,7 +75,7 @@ export default class ChartDashboard extends React.Component {
 
   setDataset(e) {
     this.setState({
-      dataset: parseInt(e.target.value),
+      playerId: parseInt(e.target.value),
     });
     this.getShots(e.target.value);
   }
@@ -103,9 +103,9 @@ export default class ChartDashboard extends React.Component {
       activated,
       binnedData,
       data,
-      dataset,
       deactivated,
       maxDistance,
+      playerId,
       players,
       ribbonedData,
     } = this.state;
@@ -118,7 +118,7 @@ export default class ChartDashboard extends React.Component {
         <div>
           <Title>Chart Dashboard</Title>
           <PlayerSelector
-            player={dataset}
+            player={playerId}
             players={players}
             setDataset={this.setDataset}
           />
@@ -131,7 +131,7 @@ export default class ChartDashboard extends React.Component {
         <div>
           <Title>Chart Dashboard</Title>
           <PlayerSelector
-            player={dataset}
+            player={playerId}
             players={players}
             setDataset={this.setDataset}
           />
@@ -148,7 +148,7 @@ export default class ChartDashboard extends React.Component {
       <div>
         <Title>Chart Dashboard</Title>
         <PlayerSelector
-          player={dataset}
+          player={playerId}
           players={players}
           setDataset={this.setDataset}
         />
