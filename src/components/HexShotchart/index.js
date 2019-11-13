@@ -10,15 +10,15 @@ import Hexagon from '../Hexagon';
 import Tooltip from '../Tooltip';
 
 const Div = styled.div`
-  flex: 1
-  box-sizing: border-box
-  background-color: #807200
-  display: flex
-  align-self: stretch
-  align-items: center
-  height: auto
-  width: 100%
-  z-index: 1
+  flex: 1;
+  box-sizing: border-box;
+  background-color: #807200;
+  display: flex;
+  align-self: stretch;
+  align-items: center;
+  height: auto;
+  width: 100%;
+  z-index: 1;
 `;
 
 const Svg = styled.svg`

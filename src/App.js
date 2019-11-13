@@ -10,11 +10,13 @@ const Div = styled.div`
     padding: 0 2em;
   }
 `;
+
 const H2 = styled.h2`
-  color: midnightblue
-  padding: 0 0
-  margin: 0
+  color: midnightblue;
+  padding: 0 0;
+  margin: 0;
 `;
+
 const Ul = styled.ul`
   margin: 0;
 `;

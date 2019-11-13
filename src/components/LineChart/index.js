@@ -12,33 +12,33 @@ import {
 import theme from '../victorytheme';
 
 const Div = styled.div`
-  flex: 1
-  box-sizing: border-box
-  background-color: #5f7a00
-  display: flex
-  flex-direction: column
-  align-self: stretch
-  align-items: center
-  height: auto
-  width: 100%
-  min-width: 25rem
+  flex: 1;
+  box-sizing: border-box;
+  background-color: #5f7a00;
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  align-items: center;
+  height: auto;
+  width: 100%;
+  min-width: 25rem;
 `;
 const Div2 = styled.div`
-  flex: 1
-  box-sizing: border-box
-  display: flex
-  align-self: stretch
-  align-items: center
-  height: auto
-  width: 100%
-  padding: 1em
+  flex: 1;
+  box-sizing: border-box;
+  display: flex;
+  align-self: stretch;
+  align-items: center;
+  height: auto;
+  width: 100%;
+  padding: 1em;
 `;
 
 const ChartTitle = styled.h3`
   color: black;
-  font-size: 1.75em
-  font-weight: normal
-  margin-bottom: 0
+  font-size: 1.75em;
+  font-weight: normal;
+  margin-bottom: 0;
 `;
 
 const Cursor = ({x, y, datum, totalShots}) => {
