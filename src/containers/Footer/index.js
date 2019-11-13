@@ -16,10 +16,14 @@ const A = styled.a`
 const FooterComponent = () => (
   <Footer>
     <p>
-      &copy; 2017 <A href="jackfletch.com">Jack Fletcher</A>
+      <small>
+        &copy; 2019 <A href="https://jackfletch.com">Jack Fletcher</A>
+      </small>
     </p>
     <p>
-      Basketball data from <A href="stats.nba.com">stats.nba.com</A>
+      <small>
+        Basketball data from <A href="https://stats.nba.com">stats.nba.com</A>
+      </small>
     </p>
   </Footer>
 );
