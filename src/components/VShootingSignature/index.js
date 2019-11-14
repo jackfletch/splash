@@ -117,18 +117,11 @@ const styles = {
 const Cursor = ({scale, x}) => (
   <g>
     <path
-      d={`M${scale.x(x)},200 L${scale.x(x)},20`}
-      style={{strokeWidth: 1, stroke: 'rgba(0, 0, 0, 0.2)'}}
+      d={`M${scale.x(x + 0.5)},200 L${scale.x(x + 0.5)},20`}
+      style={{strokeWidth: 10, stroke: 'rgba(0, 0, 0, 0.2)'}}
     />
   </g>
 );
-
-Cursor.defaultProps = {
-  scale: {
-    x: d => d,
-    y: d => d,
-  },
-};
 
 Cursor.propTypes = {
   scale: PropTypes.shape({
