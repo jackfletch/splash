@@ -6,7 +6,7 @@ import {scaleLinear, scaleSequential, scaleSqrt} from 'd3-scale';
 import {interpolatePlasma} from 'd3-scale-chromatic';
 
 import Court from '../Court';
-import Hexagon from '../Hexagon';
+import Hexagons from '../Hexagons';
 import Tooltip from '../Tooltip';
 
 const Div = styled.div`
@@ -55,7 +55,18 @@ class ShotChart extends React.Component {
     this.yScale = scaleLinear()
       .domain([-52.5, 417.5])
       .range([this.height, 0]);
+    this.scales = {
+      x: this.xScale,
+      y: this.yScale,
+    };
 
+    this.radius = scaleSqrt()
+      .domain([0, 50])
+      .range([0, 10]);
+    this.color = scaleSequential(interpolatePlasma).domain([0, 1]);
+    this.hexbinPath = hexbin()
+      .size([this.width, this.height])
+      .radius(this.hexbinSize);
     this.updateTooltip = this.updateTooltip.bind(this);
   }
 
@@ -75,35 +86,6 @@ class ShotChart extends React.Component {
   render() {
     const {tooltip} = this.state;
     const {data, hover} = this.props;
-    const radius = scaleSqrt()
-      .domain([0, 50])
-      .range([0, 10]);
-
-    const color = scaleSequential(interpolatePlasma).domain([0, 1]);
-
-    const shots = data.map(shot => [shot.x, shot.y, shot.made_flag]);
-
-    const hexbinPath = hexbin()
-      .size([this.width, this.height])
-      .radius(this.hexbinSize);
-
-    const scales = {
-      x: this.xScale,
-      y: this.yScale,
-    };
-
-    const hexagons = hexbinPath(shots).map(bin => (
-      <Hexagon
-        key={bin.x.toString() + bin.y.toString()}
-        color={color}
-        data={bin}
-        hexbinPath={hexbinPath}
-        hexbinSize={this.hexbinSize}
-        radius={radius}
-        scale={scales}
-        updateTooltip={this.updateTooltip}
-      />
-    ));
 
     return (
       <Div>
@@ -111,10 +93,10 @@ class ShotChart extends React.Component {
           display="block"
           height="100%"
           width="100%"
-          viewBox={`0 0 ${this.svgWidth} ${this.svgHeight}`}
+          viewBox={`0 0 ${this.width} ${this.height}`}
           preserveAspectRatio="xMidYMid meet"
         >
-          <g transform={`translate(${this.margin.left}, ${this.margin.top})`}>
+          <g>
             <rect
               x={this.xScale(-250)}
               y={this.yScale(417.5)}
@@ -123,8 +105,22 @@ class ShotChart extends React.Component {
               fill={this.backgroundColor}
               stroke="none"
             />
-            <g clipPath="url(#clip)">{hexagons}</g>
-            <Court width={this.width} height={this.height} scale={scales} />
+            <Court
+              width={this.width}
+              height={this.height}
+              scale={this.scales}
+            />
+            <g clipPath="url(#clip)">
+              <Hexagons
+                color={this.color}
+                data={data}
+                hexbinPath={this.hexbinPath}
+                hexbinSize={this.hexbinSize}
+                radius={this.radius}
+                scale={this.scales}
+                updateTooltip={this.updateTooltip}
+              />
+            </g>
             {hover.toggle && hover.distance >= 0 ? (
               <ellipse
                 clipPath="url(#clip)"
@@ -146,14 +142,6 @@ class ShotChart extends React.Component {
 }
 
 ShotChart.propTypes = {
-  // data: PropTypes.arrayOf(
-  //   PropTypes.shape({
-  //     x: PropTypes.number.isRequired,
-  //     y: PropTypes.number.isRequired,
-  //     made_flag: PropTypes.bool.isRequired,
-  //     distance: PropTypes.number.isRequired
-  //   }).isRequired
-  // ).isRequired,
   data: PropTypes.any.isRequired,
   hover: PropTypes.object.isRequired,
 };
