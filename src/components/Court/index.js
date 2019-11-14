@@ -237,4 +237,4 @@ Court.propTypes = {
   strokeWidth: PropTypes.number,
 };
 
-export default Court;
+export default React.memo(Court);
