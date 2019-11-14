@@ -1,8 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function Court(props) {
-  const {height, lineColor, scale, strokeWidth, width} = props;
+function Court({
+  height,
+  lineColor = '#aaa',
+  scale,
+  strokeWidth = 1.667,
+  width,
+}) {
   const dThreePointLine = [
     'M',
     scale.x(-220),
@@ -230,11 +235,6 @@ Court.propTypes = {
   }).isRequired,
   lineColor: PropTypes.string,
   strokeWidth: PropTypes.number,
-};
-
-Court.defaultProps = {
-  lineColor: '#aaa',
-  strokeWidth: 1.67,
 };
 
 export default Court;
