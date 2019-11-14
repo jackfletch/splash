@@ -7,6 +7,7 @@ import {interpolatePlasma} from 'd3-scale-chromatic';
 
 import Court from '../Court';
 import Hexagons from '../Hexagons';
+import ShotchartCursor from './ShotchartCursor';
 import Tooltip from '../Tooltip';
 
 const Div = styled.div`
@@ -122,15 +123,9 @@ class ShotChart extends React.Component {
               />
             </g>
             {hover.toggle && hover.distance >= 0 ? (
-              <ellipse
-                clipPath="url(#clip)"
-                cx={this.xScale(0)}
-                cy={this.yScale(0)}
-                rx={this.xScale((hover.distance + 0.5) * 10) - this.xScale(0)}
-                ry={this.yScale(0) - this.yScale((hover.distance + 0.5) * 10)}
-                strokeWidth={10}
-                fill="none"
-                stroke="rgba(0, 0, 0, 0.2)"
+              <ShotchartCursor
+                hoverDistance={hover.distance}
+                scale={this.scales}
               />
             ) : null}
             {tooltip.show ? <Tooltip vals={tooltip} /> : null}
