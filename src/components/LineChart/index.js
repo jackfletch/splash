@@ -5,7 +5,7 @@ import {
   VictoryChart,
   VictoryAxis,
   VictoryLabel,
-  VictoryLine,
+  VictoryBar,
   VictoryVoronoiContainer,
 } from 'victory';
 
@@ -144,7 +144,7 @@ const styles = {
     fontStyle: 'italic',
   },
   lineOne: {
-    data: {stroke: 'red', strokeWidth: 2},
+    data: {fill: 'rgba(43, 49, 55, 0.5)', strokeWidth: 0},
   },
   axisOneCustomLabel: {
     fill: GRAY_COLOR,
@@ -195,7 +195,13 @@ class LineChart extends Component {
   }
 
   render() {
-    const {data, hover, maxDistance, setActivated, setDeactivated} = this.props;
+    const {
+      data,
+      hover,
+      maxDistance,
+      setActivated,
+      setDeactivated,
+    } = this.props;
     const tickValues = this.getTickValues();
     const maxY = this.findMaxY();
 
@@ -247,9 +253,10 @@ class LineChart extends Component {
               style={styles.axisOne}
               tickLabelComponent={<VictoryLabel dx={5} />}
             />
-            <VictoryLine
+            <VictoryBar
               data={data.binData}
               y={d => (100 * d.y) / data.totalShots}
+              x={d => d.x + 0.5}
               domain={{
                 x: [0, maxDistance],
                 y: [0, 1],
