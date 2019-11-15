@@ -7,7 +7,7 @@ import media from '../../components/style-utils';
 import PlayerSelector from '../../components/PlayerSelector';
 import HexShotchart from '../../components/HexShotchart';
 import VShootingSignature from '../../components/VShootingSignature';
-import LineChart from '../../components/LineChart';
+import BarChart from '../../components/BarChart';
 
 import {binShots, ribbonShots} from '../../lib';
 
@@ -159,7 +159,7 @@ export default class ChartDashboard extends React.Component {
             hover={hover}
             maxDistance={maxDistance}
           />
-          <LineChart
+          <BarChart
             data={binnedData}
             hover={hover}
             maxDistance={maxDistance}

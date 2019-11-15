@@ -179,7 +179,7 @@ const styles = {
   },
 };
 
-class LineChart extends Component {
+class BarChart extends Component {
   getTickValues() {
     const {maxDistance} = this.props;
     return Array(Math.ceil(maxDistance / 5 + 1))
@@ -273,7 +273,7 @@ class LineChart extends Component {
   }
 }
 
-LineChart.propTypes = {
+BarChart.propTypes = {
   data: PropTypes.any.isRequired,
   hover: PropTypes.shape({
     distance: PropTypes.number.isRequired,
@@ -284,4 +284,4 @@ LineChart.propTypes = {
   setDeactivated: PropTypes.func.isRequired,
 };
 
-export default LineChart;
+export default BarChart;
