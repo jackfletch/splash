@@ -110,7 +110,7 @@ export default class ChartDashboard extends React.Component {
       ribbonedData,
     } = this.state;
 
-    if (data === undefined) {
+    if (data === undefined || players === undefined) {
       return <div>Still fetching data</div>;
     }
     if (data.length === 0) {
