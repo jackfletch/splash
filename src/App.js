@@ -32,7 +32,7 @@ const App = () => (
       <li>add more charts</li>
       <li>style everything</li>
     </Ul>
-    <ChartDashboard id="chartdashboard" />
+    <ChartDashboard />
     <Footer />
   </Div>
 );
