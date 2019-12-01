@@ -1,6 +1,5 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 
 import media from '../../components/style-utils';
 
@@ -8,8 +7,7 @@ import PlayerSelector from '../../components/PlayerSelector';
 import HexShotchart from '../../components/HexShotchart';
 import VShootingSignature from '../../components/VShootingSignature';
 import BarChart from '../../components/BarChart';
-
-import {binShots, ribbonShots} from '../../lib';
+import {usePlayersApi, useShotsApi} from '../../hooks';
 
 const Title = styled.h1`
   color: midnightblue;
@@ -22,152 +20,74 @@ const ChartsDiv = styled.div`
   ${media.tablet`flex-direction: column;`}
 `;
 
-export default class ChartDashboard extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      activated: 0,
-      deactivated: 0,
-      binnedData: [],
-      data: undefined,
-      maxDistance: 35,
-      playerId: 2544,
-      players: this.getPlayers(),
-      ribbonedData: [],
-    };
-    this.setDataset = this.setDataset.bind(this);
-    this.setActivated = this.setActivated.bind(this);
-    this.setDeactivated = this.setDeactivated.bind(this);
+export default function ChartDashboard() {
+  const maxDistance = 35;
+  const [activated, setActivated] = useState(0);
+  const [deactivated, setDeactivated] = useState(0);
+  const [players] = usePlayersApi();
+  const [playerId, setPlayerId] = useState(2544);
+  const [{data, ribbonedData, binnedData}] = useShotsApi(playerId, maxDistance);
+
+  if (data === undefined || players === undefined) {
+    return <div>Still fetching data</div>;
   }
-
-  componentDidMount() {
-    const {playerId} = this.state;
-    this.getShots(playerId);
+  if (players.length === 0) {
+    return <div>No players found</div>;
   }
-
-  getPlayers() {
-    const endpoint =
-      process.env.NODE_ENV === 'development'
-        ? 'http://localhost:5000/api/players'
-        : 'https://splash.jackfletch.com/api/players';
-    axios.get(endpoint).then(response => {
-      this.setPlayers(response.data);
-    });
-  }
-
-  getShots(playerId) {
-    const endpoint =
-      process.env.NODE_ENV === 'development'
-        ? `http://localhost:5000/api/shots/${playerId}`
-        : `https://splash.jackfletch.com/api/shots/${playerId}`;
-    axios.get(endpoint).then(response => {
-      this.setData(response.data);
-    });
-  }
-
-  setData(e) {
-    this.setState(prevState => ({
-      data: e,
-      ribbonedData: ribbonShots(e, prevState.maxDistance),
-      binnedData: binShots(e, prevState.maxDistance),
-    }));
-  }
-
-  setDataset(e) {
-    this.setState({
-      playerId: parseInt(e.target.value),
-    });
-    this.getShots(e.target.value);
-  }
-
-  setPlayers(e) {
-    this.setState({
-      players: e,
-    });
-  }
-
-  setActivated(distance) {
-    this.setState({
-      activated: distance,
-    });
-  }
-
-  setDeactivated(distance) {
-    this.setState({
-      deactivated: distance,
-    });
-  }
-
-  render() {
-    const {
-      activated,
-      binnedData,
-      data,
-      deactivated,
-      maxDistance,
-      playerId,
-      players,
-      ribbonedData,
-    } = this.state;
-
-    if (data === undefined || players === undefined) {
-      return <div>Still fetching data</div>;
-    }
-    if (data.length === 0) {
-      return (
-        <div>
-          <Title>Chart Dashboard</Title>
-          <PlayerSelector
-            player={playerId}
-            players={players}
-            setDataset={this.setDataset}
-          />
-          <div>No result found for this player</div>
-        </div>
-      );
-    }
-    if (data.length <= 50) {
-      return (
-        <div>
-          <Title>Chart Dashboard</Title>
-          <PlayerSelector
-            player={playerId}
-            players={players}
-            setDataset={this.setDataset}
-          />
-          <div>Not enough shots by this player for any meaningful data</div>
-        </div>
-      );
-    }
-    const hover = {
-      distance: activated,
-      toggle: activated !== deactivated,
-    };
-
+  if (data.length === 0) {
     return (
       <div>
         <Title>Chart Dashboard</Title>
         <PlayerSelector
           player={playerId}
           players={players}
-          setDataset={this.setDataset}
+          setDataset={e => setPlayerId(parseInt(e.target.value))}
         />
-        <ChartsDiv>
-          <HexShotchart data={data} hover={hover} />
-          <VShootingSignature
-            data={ribbonedData}
-            hover={hover}
-            maxDistance={maxDistance}
-          />
-          <BarChart
-            data={binnedData}
-            hover={hover}
-            maxDistance={maxDistance}
-            setActivated={this.setActivated}
-            setDeactivated={this.setDeactivated}
-          />
-        </ChartsDiv>
+        <div>No result found for this player</div>
       </div>
     );
   }
+  if (data.length <= 50) {
+    return (
+      <div>
+        <Title>Chart Dashboard</Title>
+        <PlayerSelector
+          player={playerId}
+          players={players}
+          setDataset={e => setPlayerId(parseInt(e.target.value))}
+        />
+        <div>Not enough shots by this player for any meaningful data</div>
+      </div>
+    );
+  }
+  const hover = {
+    distance: activated,
+    toggle: activated !== deactivated,
+  };
+
+  return (
+    <div>
+      <Title>Chart Dashboard</Title>
+      <PlayerSelector
+        player={playerId}
+        players={players}
+        setDataset={e => setPlayerId(parseInt(e.target.value))}
+      />
+      <ChartsDiv>
+        <HexShotchart data={data} hover={hover} />
+        <VShootingSignature
+          data={ribbonedData}
+          hover={hover}
+          maxDistance={maxDistance}
+        />
+        <BarChart
+          data={binnedData}
+          hover={hover}
+          maxDistance={maxDistance}
+          setActivated={setActivated}
+          setDeactivated={setDeactivated}
+        />
+      </ChartsDiv>
+    </div>
+  );
 }
