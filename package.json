@@ -63,7 +63,13 @@
       ],
       "comma-dangle": [
         "error",
-        "always-multiline"
+        {
+          "arrays": "always-multiline",
+          "objects": "always-multiline",
+          "imports": "always-multiline",
+          "exports": "always-multiline",
+          "functions": "never"
+        }
       ],
       "indent": [
         2,
@@ -73,6 +79,12 @@
         }
       ],
       "no-console": 1,
+      "no-param-reassign": [
+        "error",
+        {
+          "props": false
+        }
+      ],
       "no-plusplus": [
         "error",
         {
