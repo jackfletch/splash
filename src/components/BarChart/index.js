@@ -195,13 +195,7 @@ class BarChart extends Component {
   }
 
   render() {
-    const {
-      data,
-      hover,
-      maxDistance,
-      setActivated,
-      setDeactivated,
-    } = this.props;
+    const {data, hover, maxDistance, setActivated, setDeactivated} = this.props;
     const tickValues = this.getTickValues();
     const maxY = this.findMaxY();
 
