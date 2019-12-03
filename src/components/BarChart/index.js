@@ -39,7 +39,7 @@ const ChartTitle = styled.h3`
   margin-bottom: 0;
 `;
 
-const Cursor = ({x, y, datum, totalShots}) => {
+const Cursor = ({x, datum, totalShots}) => {
   let xLoc;
   let newTextAnchor;
 
@@ -78,8 +78,16 @@ const Cursor = ({x, y, datum, totalShots}) => {
   );
 };
 
+Cursor.propTypes = {
+  x: PropTypes.number,
+  datum: PropTypes.shape({
+    x: PropTypes.number.isRequired,
+    y: PropTypes.number.isRequired,
+  }),
+  totalShots: PropTypes.number.isRequired,
+};
+
 const GRAY_COLOR = '#2b3137';
-const BLUE_COLOR = 'midnightblue';
 const RED_COLOR = '#7c270b';
 const styles = {
   parent: {

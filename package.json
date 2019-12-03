@@ -133,6 +133,7 @@
       "react/jsx-no-target-blank": 0,
       "react/no-array-index-key": 1,
       "react/prefer-stateless-function": 2,
+      "react/require-default-props": 0,
       "react/self-closing-comp": 0,
       "semi": [
         2,
