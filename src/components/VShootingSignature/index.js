@@ -268,14 +268,17 @@ class VShootingSignature extends React.Component {
 
 VShootingSignature.propTypes = {
   data: PropTypes.arrayOf(
-    PropTypes.shape({
+    PropTypes.exact({
       x: PropTypes.number.isRequired,
       y: PropTypes.number.isRequired,
       widthValue: PropTypes.number.isRequired,
       colorValue: PropTypes.number.isRequired,
     })
   ).isRequired,
-  hover: PropTypes.object.isRequired,
+  hover: PropTypes.exact({
+    distance: PropTypes.number.isRequired,
+    toggle: PropTypes.bool.isRequired,
+  }).isRequired,
   maxDistance: PropTypes.number.isRequired,
 };
 

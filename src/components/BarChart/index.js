@@ -276,8 +276,17 @@ class BarChart extends Component {
 }
 
 BarChart.propTypes = {
-  data: PropTypes.any.isRequired,
-  hover: PropTypes.shape({
+  data: PropTypes.exact({
+    binData: PropTypes.arrayOf(
+      PropTypes.exact({
+        x: PropTypes.number.isRequired,
+        y: PropTypes.number.isRequired,
+      })
+    ),
+    totalMakes: PropTypes.number.isRequired,
+    totalShots: PropTypes.number.isRequired,
+  }).isRequired,
+  hover: PropTypes.exact({
     distance: PropTypes.number.isRequired,
     toggle: PropTypes.bool.isRequired,
   }).isRequired,
