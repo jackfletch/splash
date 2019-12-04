@@ -41,7 +41,7 @@ export default function ChartDashboard() {
         <PlayerSelector
           player={playerId}
           players={players}
-          setDataset={e => setPlayerId(parseInt(e.target.value))}
+          setPlayerId={setPlayerId}
         />
         <div>No result found for this player</div>
       </div>
@@ -54,7 +54,7 @@ export default function ChartDashboard() {
         <PlayerSelector
           player={playerId}
           players={players}
-          setDataset={e => setPlayerId(parseInt(e.target.value))}
+          setPlayerId={setPlayerId}
         />
         <div>Not enough shots by this player for any meaningful data</div>
       </div>
@@ -71,7 +71,7 @@ export default function ChartDashboard() {
       <PlayerSelector
         player={playerId}
         players={players}
-        setDataset={e => setPlayerId(parseInt(e.target.value))}
+        setPlayerId={setPlayerId}
       />
       <ChartsDiv>
         <HexShotchart data={data} hover={hover} />
