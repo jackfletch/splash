@@ -10,7 +10,9 @@ function binShots(data, maxDistance) {
       } else {
         binnedShots[shot.distance] = [shot];
       }
-      totalMakes += shot.make;
+      if (shot.made_flag) {
+        totalMakes += 1;
+      }
     } else {
       totalShots -= 1;
     }
