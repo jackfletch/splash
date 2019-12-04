@@ -21,7 +21,7 @@ const LegendWrapper = ({imgHeight, imgWidth, x, y}) => {
   return (
     <g transform={`translate(${x}, ${y})`}>
       <image
-        xlinkHref="https://raw.githubusercontent.com/d3/d3-scale-chromatic/master/img/plasma.png"
+        xlinkHref="/media/img/plasma.png"
         height={imgHeight}
         width={imgWidth}
         preserveAspectRatio="none"
