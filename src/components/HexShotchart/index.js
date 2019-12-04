@@ -137,8 +137,22 @@ class ShotChart extends React.Component {
 }
 
 ShotChart.propTypes = {
-  data: PropTypes.any.isRequired,
-  hover: PropTypes.object.isRequired,
+  data: PropTypes.arrayOf(
+    PropTypes.exact({
+      id: PropTypes.number.isRequired,
+      game_id: PropTypes.number.isRequired,
+      game_event_id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      player_id: PropTypes.number.isRequired,
+      distance: PropTypes.number.isRequired,
+      x: PropTypes.number.isRequired,
+      y: PropTypes.number.isRequired,
+      made_flag: PropTypes.bool.isRequired,
+    })
+  ).isRequired,
+  hover: PropTypes.exact({
+    distance: PropTypes.number.isRequired,
+    toggle: PropTypes.bool.isRequired,
+  }).isRequired,
 };
 
 export default ShotChart;
