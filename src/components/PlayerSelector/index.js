@@ -11,12 +11,15 @@ class PlayerSelector extends React.Component {
   }
 
   render() {
-    const {player, players, setDataset} = this.props;
+    const {player, players, setPlayerId} = this.props;
     return (
       <form>
         <label htmlFor="select1">
           Select
-          <select value={player} onChange={setDataset}>
+          <select
+            value={player}
+            onChange={e => setPlayerId(parseInt(e.target.value))}
+          >
             {players.map(d => (
               <option key={d.id} value={d.id}>
                 {d.name}
@@ -32,7 +35,7 @@ class PlayerSelector extends React.Component {
 PlayerSelector.propTypes = {
   player: PropTypes.number.isRequired,
   players: PropTypes.array.isRequired,
-  setDataset: PropTypes.func.isRequired,
+  setPlayerId: PropTypes.func.isRequired,
 };
 
 export default PlayerSelector;
