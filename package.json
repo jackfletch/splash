@@ -19,14 +19,14 @@
     "prop-types": "^15.7.2",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
-    "react-scripts": "3.1.1",
+    "react-scripts": "^3.3.0",
     "styled-components": "^4.4.1",
-    "victory": "31.0.0"
+    "victory": "^33.1.7"
   },
   "devDependencies": {
     "eslint": "^6.7.2",
     "eslint-config-airbnb": "^18.0.1",
-    "eslint-config-prettier": "^6.5.0",
+    "eslint-config-prettier": "^6.7.0",
     "eslint-plugin-prettier": "^3.1.1",
     "prettier": "^1.19.1",
     "prettier-eslint": "^9.0.1"
