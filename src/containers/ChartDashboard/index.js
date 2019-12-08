@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
+import {useRouteMatch} from 'react-router-dom';
 
 import Charts from '../Charts';
 import PlayerSelector from '../../components/PlayerSelector';
@@ -11,7 +12,14 @@ const Title = styled.h1`
 
 export default function ChartDashboard() {
   const [players] = usePlayersApi();
-  const [playerId, setPlayerId] = useState(2544);
+  const match = useRouteMatch('/players/:playerId');
+  const slugPlayerId =
+    match && match.params ? parseInt(match.params.playerId) : 2544;
+  const [playerId, setPlayerId] = useState(slugPlayerId);
+
+  if (slugPlayerId && slugPlayerId !== playerId) {
+    setPlayerId(slugPlayerId);
+  }
 
   if (players === undefined) {
     return <div>Still fetching data</div>;
