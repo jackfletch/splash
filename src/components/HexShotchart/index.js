@@ -64,7 +64,7 @@ class ShotChart extends React.Component {
     this.radius = scaleSqrt()
       .domain([0, 50])
       .range([0, 10]);
-    this.color = scaleSequential(interpolatePlasma).domain([0, 1]);
+    this.color = scaleSequential(interpolatePlasma).domain([-0.15, 0.15]);
     this.hexbinPath = hexbin()
       .size([this.width, this.height])
       .radius(this.hexbinSize);
@@ -101,8 +101,8 @@ class ShotChart extends React.Component {
             <rect
               x={this.xScale(-250)}
               y={this.yScale(417.5)}
-              width={this.xScale(250) - this.xScale(-250)}
-              height={this.yScale(-52.5) - this.yScale(417.5)}
+              width={this.width}
+              height={this.height}
               fill={this.backgroundColor}
               stroke="none"
             />

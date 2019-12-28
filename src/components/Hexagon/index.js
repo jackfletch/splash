@@ -1,18 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import {leagueAvgShootingPct} from '../../lib/ribbonShots';
+import {distance} from '../../lib';
+
 class Hexagon extends React.Component {
   constructor(props) {
     super(props);
     this.mouseEnter = this.mouseEnter.bind(this);
     this.mouseLeave = this.mouseLeave.bind(this);
+
+    const {data} = this.props;
+    const {x, y} = data;
+    this.distance = Math.floor(distance({x, y}) / 10);
+    this.shootingPct = data.reduce((a, b) => a + b[2], 0) / data.length;
+    this.shootingPctAboveAvg =
+      this.shootingPct - leagueAvgShootingPct[this.distance] / 100;
   }
 
   mouseEnter() {
     const {color, data, scale, updateTooltip} = this.props;
 
     updateTooltip({
-      color: color(data.reduce((a, b) => a + b[2], 0) / data.length),
+      color: color(this.shootingPctAboveAvg),
       makes: data.reduce((a, b) => a + b[2], 0),
       opacity: 0.75,
       shots: data.length,
@@ -53,7 +63,7 @@ class Hexagon extends React.Component {
           transform={`translate(${scale.x(data.x)},${scale.y(data.y)})`}
           d={hexbinPath.hexagon(this.renderSize(radius(data.length)))}
           style={{
-            fill: color(data.reduce((a, b) => a + b[2], 0) / data.length),
+            fill: color(this.shootingPctAboveAvg),
           }}
           onMouseEnter={this.mouseEnter}
           onMouseLeave={this.mouseLeave}
