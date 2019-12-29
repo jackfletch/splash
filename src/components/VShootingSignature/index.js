@@ -4,18 +4,9 @@ import {scaleLinear, scaleSequential} from 'd3-scale';
 import {interpolatePlasma} from 'd3-scale-chromatic';
 import {area, curveBasis} from 'd3-shape';
 import styled from 'styled-components';
-import {
-  VictoryArea,
-  VictoryAxis,
-  VictoryChart,
-  VictoryContainer,
-  VictoryLabel,
-} from 'victory';
 
 import Cursor from './Cursor';
 import Gradient from './Gradient';
-import Legend from './Legend';
-import theme from '../victorytheme';
 
 const Div = styled.div`
   flex: 1;
@@ -46,81 +37,19 @@ const ChartTitle = styled.h3`
   margin-bottom: 0;
 `;
 
-const GRAY_COLOR = '#2b3137';
-const styles = {
-  parent: {
-    background: '#dddddd',
-    boxSizing: 'border-box',
-    display: 'inline',
-    padding: 0,
-    width: '100%',
-    height: '100%',
-  },
-  title: {
-    textAnchor: 'start',
-    verticalAnchor: 'end',
-    fill: '#000000',
-    fontFamily: 'inherit',
-    fontSize: '18px',
-    fontWeight: 'bold',
-  },
-  // INDEPENDENT AXIS
-  axisX: {
-    axis: {stroke: GRAY_COLOR, strokeWidth: 1},
-    ticks: {
-      size: tick => {
-        const tickSize = tick % 5 === 0 ? 10 : 5;
-        return tickSize;
-      },
-      stroke: GRAY_COLOR,
-      strokeWidth: 1,
-    },
-    tickLabels: {
-      fill: GRAY_COLOR,
-      fontFamily: 'inherit',
-      fontSize: 14,
-    },
-  },
-  // DATA SET ONE
-  axisOne: {
-    axis: {stroke: GRAY_COLOR, strokeWidth: 1},
-    ticks: {
-      size: tick => {
-        const tickSize = tick % 5 === 0 ? 10 : 5;
-        return tickSize;
-      },
-      stroke: GRAY_COLOR,
-      strokeWidth: 1,
-    },
-    tickLabels: {
-      fill: GRAY_COLOR,
-      fontFamily: 'inherit',
-      fontSize: 14,
-    },
-  },
-  labelOne: {
-    fill: GRAY_COLOR,
-    fontFamily: 'inherit',
-    fontSize: 14,
-    fontStyle: 'italic',
-  },
-  lineOne: {
-    data: {stroke: 'red', strokeWidth: 2},
-  },
-  axisOneCustomLabel: {
-    fill: GRAY_COLOR,
-    fontFamily: 'inherit',
-    fontWeight: 300,
-    fontSize: 21,
-  },
-};
+const Svg = styled.svg`
+  display: block;
+  margin: 0 auto;
+  height: auto;
+  width: 100%;
+`;
 
 class VShootingSignature extends React.Component {
   constructor(props) {
     super(props);
-    this.margin = {top: 20, right: 20, bottom: 40, left: 60};
-    this.svgWidth = 380;
-    this.svgHeight = 240;
+    this.margin = {top: 0, right: 0, bottom: 0, left: 0};
+    this.svgWidth = 400;
+    this.svgHeight = 200;
     this.width = this.svgWidth - this.margin.left - this.margin.right;
     this.height = this.svgHeight - this.margin.top - this.margin.bottom;
 
@@ -151,21 +80,6 @@ class VShootingSignature extends React.Component {
     this.xScale = x;
     this.yScale = y;
     this.wScale = w;
-  }
-
-  getTickValues() {
-    const {maxDistance} = this.props;
-    return Array(Math.ceil(maxDistance / 5 + 1))
-      .fill()
-      .map((val, i) => i * 5);
-  }
-
-  formatAreaData(data) {
-    return data.map(d => ({
-      _x: d.x,
-      _y1: d.y + this.wScale(d.widthValue),
-      _y0: d.y - this.wScale(d.widthValue),
-    }));
   }
 
   findDomain() {
@@ -202,48 +116,41 @@ class VShootingSignature extends React.Component {
   }
 
   render() {
-    const {data, hover, maxDistance} = this.props;
-    const areaData = this.formatAreaData(data);
+    const {data, hover} = this.props;
     const colorData = this.calculateGradientData(data);
 
-    const tickValues = this.getTickValues();
     const gradientId = 'signaturegradient';
     return (
       <Div>
         <ChartTitle>Shooting Signature</ChartTitle>
         <Div2>
-          <VictoryChart
-            containerComponent={<VictoryContainer />}
-            domain={{x: [0, maxDistance], y: [0, 1]}}
-            style={{parent: styles.parent}}
-            theme={theme}
-            padding={{top: 20, bottom: 100, left: 50, right: 50}}
+          <Svg
+            viewBox={`0 0 ${this.svgWidth} ${this.svgHeight}`}
+            preserveAspectRatio="xMidYMid meet"
           >
-            <Legend x={250} y={255} imgWidth={150} imgHeight={10} />
-            <Gradient colorData={colorData} gradientId={gradientId}>
-              <VictoryArea
-                standalone={false}
-                data={areaData}
-                interpolation="basis"
-                style={{data: {fill: `url(#${gradientId})`}}}
-              />
-            </Gradient>
-            <VictoryAxis
-              scale="linear"
-              standalone={false}
-              style={styles.axisX}
-              tickValues={tickValues}
-            />
-            <VictoryAxis
-              dependentAxis
-              orientation="left"
-              standalone={false}
-              style={styles.axisOne}
-              tickFormat={d => `${(100 * d).toFixed(0)}%`}
-              tickLabelComponent={<VictoryLabel dx={7} />}
-            />
-            {hover.toggle ? <Cursor x={hover.distance} /> : null}
-          </VictoryChart>
+            <g transform={`translate(${this.margin.left}, ${this.margin.top})`}>
+              <g className="area-group">
+                <Gradient colorData={colorData} gradientId={gradientId}>
+                  <path
+                    className="area area-above"
+                    d={this.areaAbove(data)}
+                    style={{fill: `url(#${gradientId})`}}
+                  />
+                  <path
+                    className="area area-below"
+                    d={this.areaBelow(data)}
+                    style={{fill: `url(#${gradientId})`}}
+                  />
+                </Gradient>
+                {hover.toggle ? (
+                  <Cursor
+                    x={hover.distance}
+                    scale={{x: this.xScale, y: this.yScale}}
+                  />
+                ) : null}
+              </g>
+            </g>
+          </Svg>
         </Div2>
       </Div>
     );
