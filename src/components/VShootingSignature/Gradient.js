@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const GradientWrapper = props => {
-  const {children, colorData, gradientId, ...otherProps} = props;
-  const childProps = {...otherProps, ...children.props};
+  const {children, colorData, gradientId} = props;
 
   return (
     <g>
@@ -18,13 +17,13 @@ const GradientWrapper = props => {
           ))}
         </linearGradient>
       </defs>
-      {React.cloneElement(children, childProps)}
+      {children}
     </g>
   );
 };
 
 GradientWrapper.propTypes = {
-  children: PropTypes.object.isRequired,
+  children: PropTypes.node.isRequired,
   colorData: PropTypes.arrayOf(
     PropTypes.shape({
       offset: PropTypes.string.isRequired,
