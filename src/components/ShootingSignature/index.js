@@ -44,7 +44,7 @@ const Svg = styled.svg`
   width: 100%;
 `;
 
-class VShootingSignature extends React.Component {
+class ShootingSignature extends React.Component {
   constructor(props) {
     super(props);
     this.margin = {top: 0, right: 0, bottom: 0, left: 0};
@@ -157,7 +157,7 @@ class VShootingSignature extends React.Component {
   }
 }
 
-VShootingSignature.propTypes = {
+ShootingSignature.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.exact({
       x: PropTypes.number.isRequired,
@@ -173,4 +173,4 @@ VShootingSignature.propTypes = {
   maxDistance: PropTypes.number.isRequired,
 };
 
-export default VShootingSignature;
+export default ShootingSignature;

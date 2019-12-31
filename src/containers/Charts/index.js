@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import media from '../../components/style-utils';
 
 import HexShotchart from '../../components/HexShotchart';
-import VShootingSignature from '../../components/VShootingSignature';
+import ShootingSignature from '../../components/ShootingSignature';
 import BarChart from '../../components/BarChart';
 import {useShotsApi} from '../../hooks';
 
@@ -44,7 +44,7 @@ const Charts = ({playerId}) => {
   return (
     <ChartsDiv>
       <HexShotchart data={data} hover={hover} />
-      <VShootingSignature
+      <ShootingSignature
         data={ribbonedData}
         hover={hover}
         maxDistance={maxDistance}
