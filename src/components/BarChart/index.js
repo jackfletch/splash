@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {
@@ -140,93 +140,88 @@ const styles = {
   },
 };
 
-class BarChart extends Component {
-  getTickValues() {
-    const {maxDistance} = this.props;
-    return Array(Math.ceil(maxDistance / 5 + 1))
-      .fill()
-      .map((val, i) => i * 5);
-  }
+const getTickValues = maxDistance =>
+  Array(Math.ceil(maxDistance / 5 + 1))
+    .fill()
+    .map((val, i) => i * 5);
 
-  findMaxY() {
-    const {data} = this.props;
-    const maxShots = Math.max(...data.binData.map(d => d.y));
-    const maxPct = (maxShots * 100) / data.totalShots;
-    return Math.ceil(maxPct / 5) * 5;
-  }
+const findMaxY = data => {
+  const maxShots = Math.max(...data.binData.map(d => d.y));
+  const maxPct = (maxShots * 100) / data.totalShots;
+  return Math.ceil(maxPct / 5) * 5;
+};
 
-  render() {
-    const {data, hover, maxDistance, setActivated, setDeactivated} = this.props;
-    const tickValues = this.getTickValues();
-    const maxY = this.findMaxY();
+const BarChart = props => {
+  const {data, hover, maxDistance, setActivated, setDeactivated} = props;
+  const tickValues = getTickValues(maxDistance);
+  const maxY = findMaxY(data);
 
-    return (
-      <Div>
-        <ChartTitle>Shot Frequency by Distance</ChartTitle>
-        <Div2>
-          <VictoryChart
-            containerComponent={
-              <VictoryVoronoiContainer
-                voronoiDimension="x"
-                labels={d =>
-                  `shot freq %: ${((100 * d.y) / data.totalShots).toFixed(2)}%`
-                }
-                labelComponent={<Cursor totalShots={data.totalShots} />}
-                onActivated={points => {
-                  setActivated(points[0].x);
-                }}
-                onDeactivated={points => {
-                  if (points.length) {
-                    setDeactivated(points[0].x);
-                  }
-                }}
-                events={{
-                  onMouseOut: () => {
-                    if (!hover.toggle) {
-                      setActivated(-15);
-                      setDeactivated(-15);
-                    }
-                  },
-                }}
-              />
-            }
-            theme={theme}
-            style={{parent: styles.parent}}
-          >
-            <VictoryAxis
-              scale="linear"
-              standalone={false}
-              style={styles.axisX}
-              tickValues={tickValues}
-              tickLabelComponent={<VictoryLabel dy={-0.5} />}
-            />
-            <VictoryAxis
-              dependentAxis
-              domain={[0, maxY]}
-              orientation="left"
-              standalone={false}
-              style={styles.axisOne}
-              tickLabelComponent={<VictoryLabel dx={5} />}
-            />
-            <VictoryBar
-              data={data.binData}
-              y={d => (100 * d.y) / data.totalShots}
-              x={d => d.x + 0.5}
-              domain={{
-                x: [0, maxDistance],
-                y: [0, 1],
+  return (
+    <Div>
+      <ChartTitle>Shot Frequency by Distance</ChartTitle>
+      <Div2>
+        <VictoryChart
+          containerComponent={
+            <VictoryVoronoiContainer
+              voronoiDimension="x"
+              labels={d =>
+                `shot freq %: ${((100 * d.y) / data.totalShots).toFixed(2)}%`
+              }
+              labelComponent={<Cursor totalShots={data.totalShots} />}
+              onActivated={points => {
+                setActivated(points[0].x);
               }}
-              interpolation="monotoneX"
-              scale={{x: 'linear', y: 'linear'}}
-              standalone={false}
-              style={styles.lineOne}
+              onDeactivated={points => {
+                if (points.length) {
+                  setDeactivated(points[0].x);
+                }
+              }}
+              events={{
+                onMouseOut: () => {
+                  if (!hover.toggle) {
+                    setActivated(-15);
+                    setDeactivated(-15);
+                  }
+                },
+              }}
             />
-          </VictoryChart>
-        </Div2>
-      </Div>
-    );
-  }
-}
+          }
+          theme={theme}
+          style={{parent: styles.parent}}
+        >
+          <VictoryAxis
+            scale="linear"
+            standalone={false}
+            style={styles.axisX}
+            tickValues={tickValues}
+            tickLabelComponent={<VictoryLabel dy={-0.5} />}
+          />
+          <VictoryAxis
+            dependentAxis
+            domain={[0, maxY]}
+            orientation="left"
+            standalone={false}
+            style={styles.axisOne}
+            tickLabelComponent={<VictoryLabel dx={5} />}
+          />
+          <VictoryBar
+            data={data.binData}
+            y={d => (100 * d.y) / data.totalShots}
+            x={d => d.x + 0.5}
+            domain={{
+              x: [0, maxDistance],
+              y: [0, 1],
+            }}
+            interpolation="monotoneX"
+            scale={{x: 'linear', y: 'linear'}}
+            standalone={false}
+            style={styles.lineOne}
+          />
+        </VictoryChart>
+      </Div2>
+    </Div>
+  );
+};
 
 BarChart.propTypes = {
   data: PropTypes.exact({
