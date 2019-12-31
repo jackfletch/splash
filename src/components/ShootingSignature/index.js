@@ -44,118 +44,105 @@ const Svg = styled.svg`
   width: 100%;
 `;
 
-class ShootingSignature extends React.Component {
-  constructor(props) {
-    super(props);
-    this.margin = {top: 0, right: 0, bottom: 0, left: 0};
-    this.svgWidth = 400;
-    this.svgHeight = 200;
-    this.width = this.svgWidth - this.margin.left - this.margin.right;
-    this.height = this.svgHeight - this.margin.top - this.margin.bottom;
+const findDomain = data => {
+  const maxX = Math.max(...data.map(d => d.x));
+  const minX = Math.min(...data.map(d => d.x));
+  return [minX, maxX];
+};
 
-    this.backgroundColor = '#dddddd';
+const calculateGradientData = data => {
+  const offset = scaleLinear()
+    .domain(findDomain(data))
+    .range([0, 100]);
 
-    const x = scaleLinear()
-      .domain([0, props.maxDistance])
-      .range([0, this.width]);
+  const colorScale = scaleSequential(interpolatePlasma).domain([-0.25, 0.25]);
 
-    const y = scaleLinear()
-      .domain([0, 1])
-      .range([this.height, 0]);
-
-    const w = scaleLinear()
-      .domain([0, this.height])
-      .range([0, 0.4]);
-
-    this.areaAbove = area()
-      .x(d => x(d.x))
-      .y0(d => y(d.y) - w(d.widthValue))
-      .y1(d => Math.ceil(y(d.y))) // ceil and floor prevent line between areas
-      .curve(curveBasis);
-    this.areaBelow = area()
-      .x(d => x(d.x))
-      .y0(d => y(d.y) + w(d.widthValue))
-      .y1(d => Math.floor(y(d.y))) // ceil and floor prevent line between areas
-      .curve(curveBasis);
-    this.xScale = x;
-    this.yScale = y;
-    this.wScale = w;
-  }
-
-  findDomain() {
-    const {data} = this.props;
-    const maxX = Math.max(...data.map(d => d.x));
-    const minX = Math.min(...data.map(d => d.x));
-    return [minX, maxX];
-  }
-
-  calculateGradientData(data) {
-    const offset = scaleLinear()
-      .domain(this.findDomain())
-      .range([0, 100]);
-
-    const colorScale = scaleSequential(interpolatePlasma).domain([-0.25, 0.25]);
-
-    const colorData = [];
-    const stripe = false; // set stripe to true to prevent linear gradient fading
-    for (let i = 0; i < data.length; i++) {
-      const prevData = data[i - 1];
-      const currData = data[i];
-      if (stripe && prevData) {
-        colorData.push({
-          offset: `${offset(currData.x)}%`,
-          stopColor: colorScale(prevData.colorValue),
-        });
-      }
+  const colorData = [];
+  const stripe = false; // set stripe to true to prevent linear gradient fading
+  for (let i = 0; i < data.length; i++) {
+    const prevData = data[i - 1];
+    const currData = data[i];
+    if (stripe && prevData) {
       colorData.push({
         offset: `${offset(currData.x)}%`,
-        stopColor: colorScale(currData.colorValue),
+        stopColor: colorScale(prevData.colorValue),
       });
     }
-    return colorData;
+    colorData.push({
+      offset: `${offset(currData.x)}%`,
+      stopColor: colorScale(currData.colorValue),
+    });
   }
+  return colorData;
+};
 
-  render() {
-    const {data, hover} = this.props;
-    const colorData = this.calculateGradientData(data);
+const margin = {top: 0, right: 0, bottom: 0, left: 0};
+const svgWidth = 400;
+const svgHeight = 200;
+const width = svgWidth - margin.left - margin.right;
+const height = svgHeight - margin.top - margin.bottom;
 
-    const gradientId = 'signaturegradient';
-    return (
-      <Div>
-        <ChartTitle>Shooting Signature</ChartTitle>
-        <Div2>
-          <Svg
-            viewBox={`0 0 ${this.svgWidth} ${this.svgHeight}`}
-            preserveAspectRatio="xMidYMid meet"
-          >
-            <g transform={`translate(${this.margin.left}, ${this.margin.top})`}>
-              <g className="area-group">
-                <Gradient colorData={colorData} gradientId={gradientId}>
-                  <path
-                    className="area area-above"
-                    d={this.areaAbove(data)}
-                    style={{fill: `url(#${gradientId})`}}
-                  />
-                  <path
-                    className="area area-below"
-                    d={this.areaBelow(data)}
-                    style={{fill: `url(#${gradientId})`}}
-                  />
-                </Gradient>
-                {hover.toggle ? (
-                  <Cursor
-                    x={hover.distance}
-                    scale={{x: this.xScale, y: this.yScale}}
-                  />
-                ) : null}
-              </g>
+const ShootingSignature = props => {
+  const {data, hover, maxDistance} = props;
+
+  const x = scaleLinear()
+    .domain([0, maxDistance])
+    .range([0, width]);
+
+  const y = scaleLinear()
+    .domain([0, 1])
+    .range([height, 0]);
+
+  const w = scaleLinear()
+    .domain([0, height])
+    .range([0, 0.4]);
+
+  const areaAbove = area()
+    .x(d => x(d.x))
+    .y0(d => y(d.y) - w(d.widthValue))
+    .y1(d => Math.ceil(y(d.y))) // ceil and floor prevent line between areas
+    .curve(curveBasis);
+  const areaBelow = area()
+    .x(d => x(d.x))
+    .y0(d => y(d.y) + w(d.widthValue))
+    .y1(d => Math.floor(y(d.y))) // ceil and floor prevent line between areas
+    .curve(curveBasis);
+
+  const colorData = calculateGradientData(data);
+
+  const gradientId = 'signaturegradient';
+  return (
+    <Div>
+      <ChartTitle>Shooting Signature</ChartTitle>
+      <Div2>
+        <Svg
+          viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+          preserveAspectRatio="xMidYMid meet"
+        >
+          <g transform={`translate(${margin.left}, ${margin.top})`}>
+            <g className="area-group">
+              <Gradient colorData={colorData} gradientId={gradientId}>
+                <path
+                  className="area area-above"
+                  d={areaAbove(data)}
+                  style={{fill: `url(#${gradientId})`}}
+                />
+                <path
+                  className="area area-below"
+                  d={areaBelow(data)}
+                  style={{fill: `url(#${gradientId})`}}
+                />
+              </Gradient>
+              {hover.toggle ? (
+                <Cursor x={hover.distance} scale={{x, y}} />
+              ) : null}
             </g>
-          </Svg>
-        </Div2>
-      </Div>
-    );
-  }
-}
+          </g>
+        </Svg>
+      </Div2>
+    </Div>
+  );
+};
 
 ShootingSignature.propTypes = {
   data: PropTypes.arrayOf(
