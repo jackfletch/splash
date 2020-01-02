@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {
@@ -146,8 +146,9 @@ const getTickValues = maxDistance =>
     .map((val, i) => i * 5);
 
 const findMaxY = data => {
-  const maxShots = Math.max(...data.binData.map(d => d.y));
-  const maxPct = (maxShots * 100) / data.totalShots;
+  const {bins, totalShots} = data;
+  const maxShots = Math.max(...bins.map(d => d.total));
+  const maxPct = (maxShots * 100) / totalShots;
   return Math.ceil(maxPct / 5) * 5;
 };
 
@@ -155,6 +156,9 @@ const BarChart = props => {
   const {data, hover, maxDistance, setActivated, setDeactivated} = props;
   const tickValues = getTickValues(maxDistance);
   const maxY = findMaxY(data);
+  const victoryData = useMemo(() => data.bins.map((d, i) => ({...d, x: i})), [
+    data,
+  ]);
 
   return (
     <Div>
@@ -165,7 +169,9 @@ const BarChart = props => {
             <VictoryVoronoiContainer
               voronoiDimension="x"
               labels={d =>
-                `shot freq %: ${((100 * d.y) / data.totalShots).toFixed(2)}%`
+                `shot freq %: ${((100 * d.total) / data.totalShots).toFixed(
+                  2
+                )}%`
               }
               labelComponent={<Cursor totalShots={data.totalShots} />}
               onActivated={points => {
@@ -205,8 +211,8 @@ const BarChart = props => {
             tickLabelComponent={<VictoryLabel dx={5} />}
           />
           <VictoryBar
-            data={data.binData}
-            y={d => (100 * d.y) / data.totalShots}
+            data={victoryData}
+            y={d => (100 * d.total) / data.totalShots}
             x={d => d.x + 0.5}
             domain={{
               x: [0, maxDistance],
@@ -225,14 +231,15 @@ const BarChart = props => {
 
 BarChart.propTypes = {
   data: PropTypes.exact({
-    binData: PropTypes.arrayOf(
+    bins: PropTypes.arrayOf(
       PropTypes.exact({
-        x: PropTypes.number.isRequired,
-        y: PropTypes.number.isRequired,
+        made: PropTypes.number.isRequired,
+        total: PropTypes.number.isRequired,
       })
     ),
     totalMakes: PropTypes.number.isRequired,
     totalShots: PropTypes.number.isRequired,
+    totalShotsWithinMaxDistance: PropTypes.number.isRequired,
   }).isRequired,
   hover: PropTypes.exact({
     distance: PropTypes.number.isRequired,

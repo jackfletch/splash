@@ -1,7 +1,8 @@
 import {useEffect, useState} from 'react';
 import axios from 'axios';
+import {binShots} from '@jackfletch/splash-vis-utils';
 
-import {binShots, ribbonShots} from '../lib';
+import {ribbonShots} from '../lib';
 
 function useShotsApi(playerId, maxDistance) {
   const [data, setData] = useState(undefined);
