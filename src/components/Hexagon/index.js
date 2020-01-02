@@ -2,77 +2,78 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import {leagueAvgShootingPct} from '../../lib/ribbonShots';
-import {distance} from '../../lib';
+import {distance as euclideanDistance} from '../../lib';
 
-class Hexagon extends React.Component {
-  constructor(props) {
-    super(props);
-    this.mouseEnter = this.mouseEnter.bind(this);
-    this.mouseLeave = this.mouseLeave.bind(this);
+const resetTooltip = updateTooltip => {
+  updateTooltip({
+    color: 'none',
+    makes: '',
+    opacity: 0,
+    shots: '',
+    show: false,
+  });
+};
 
-    const {data} = this.props;
-    const {x, y} = data;
-    this.distance = Math.floor(distance({x, y}) / 10);
-    this.shootingPct = data.reduce((a, b) => a + b[2], 0) / data.length;
-    this.shootingPctAboveAvg =
-      this.shootingPct - leagueAvgShootingPct[this.distance] / 100;
+const setTooltip = (updateTooltip, props) => {
+  updateTooltip({
+    ...props,
+    opacity: 0.75,
+    show: true,
+  });
+};
+
+const renderSize = (length, hexbinSize) => {
+  if (length > hexbinSize) {
+    return hexbinSize;
   }
-
-  mouseEnter() {
-    const {color, data, scale, updateTooltip} = this.props;
-
-    updateTooltip({
-      color: color(this.shootingPctAboveAvg),
-      makes: data.reduce((a, b) => a + b[2], 0),
-      opacity: 0.75,
-      shots: data.length,
-      show: true,
-      transform: `translate(${scale.x(data.x - 65)},${scale.y(data.y + 80)})`,
-    });
+  if (length < 2) {
+    return 0;
   }
+  return length;
+};
 
-  mouseLeave() {
-    const {updateTooltip} = this.props;
-    updateTooltip({
-      color: 'none',
-      makes: '',
-      opacity: 0,
-      shots: '',
-      show: false,
-    });
-  }
+const Hexagon = props => {
+  const {
+    color: colorScale,
+    data,
+    hexbinPath,
+    hexbinSize,
+    scale,
+    radius,
+    updateTooltip,
+  } = props;
+  const {x, y} = data;
+  const distance = Math.floor(euclideanDistance({x, y}) / 10);
+  const madeShots = data.reduce((a, b) => a + b[2], 0);
+  const totalShots = data.length;
+  const shootingPct = madeShots / totalShots;
+  const shootingPctAboveAvg =
+    shootingPct - leagueAvgShootingPct[distance] / 100;
+  const color = colorScale(shootingPctAboveAvg);
 
-  renderSize(length) {
-    // reduce noise
-    const {hexbinSize} = this.props;
-    if (length > hexbinSize) {
-      return hexbinSize;
-    }
-    if (length < 2) {
-      return 0;
-    }
-    return length;
-  }
+  const tooltipProps = {
+    color,
+    makes: madeShots,
+    shots: totalShots,
+    transform: `translate(${scale.x(x - 65)},${scale.y(y + 80)})`,
+  };
 
-  render() {
-    const {color, data, hexbinPath, scale, radius} = this.props;
-    return (
-      <g className="hexPath">
-        <path
-          shapeRendering="geometricPrecision"
-          transform={`translate(${scale.x(data.x)},${scale.y(data.y)})`}
-          d={hexbinPath.hexagon(this.renderSize(radius(data.length)))}
-          style={{
-            fill: color(this.shootingPctAboveAvg),
-          }}
-          onMouseEnter={this.mouseEnter}
-          onMouseLeave={this.mouseLeave}
-          onClick={this.mouseEnter}
-        />
-      </g>
-    );
-  }
-}
+  return (
+    <g className="hexPath">
+      <path
+        shapeRendering="geometricPrecision"
+        transform={`translate(${scale.x(x)},${scale.y(y)})`}
+        d={hexbinPath.hexagon(renderSize(radius(totalShots), hexbinSize))}
+        style={{
+          fill: color,
+        }}
+        onMouseEnter={() => setTooltip(updateTooltip, tooltipProps)}
+        onMouseLeave={() => resetTooltip(updateTooltip)}
+        onClick={() => setTooltip(updateTooltip, tooltipProps)}
+      />
+    </g>
+  );
+};
 
 Hexagon.propTypes = {
   color: PropTypes.func.isRequired,
