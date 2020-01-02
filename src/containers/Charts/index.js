@@ -7,7 +7,7 @@ import media from '../../components/style-utils';
 import HexShotchart from '../../components/HexShotchart';
 import ShootingSignature from '../../components/ShootingSignature';
 import BarChart from '../../components/BarChart';
-import {useShotsApi} from '../../hooks';
+import {useShotsApi, useLeagueShootingPctApi} from '../../hooks';
 
 const ChartsDiv = styled.div`
   display: flex;
@@ -20,9 +20,11 @@ const Charts = ({playerId}) => {
   const maxDistance = 35;
   const [activated, setActivated] = useState(0);
   const [deactivated, setDeactivated] = useState(0);
+  const [leagueShootingPct] = useLeagueShootingPctApi(maxDistance);
   const [{data, ribbonedData, binnedData}] = useShotsApi(playerId, maxDistance);
 
   if (
+    leagueShootingPct.length === 0 ||
     data === undefined ||
     ribbonedData.length === 0 ||
     Object.keys(binnedData).length === 0
@@ -43,7 +45,11 @@ const Charts = ({playerId}) => {
 
   return (
     <ChartsDiv>
-      <HexShotchart data={data} hover={hover} />
+      <HexShotchart
+        data={data}
+        hover={hover}
+        leagueShootingPct={leagueShootingPct}
+      />
       <ShootingSignature
         data={ribbonedData}
         hover={hover}

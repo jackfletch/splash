@@ -86,7 +86,7 @@ class ShotChart extends React.Component {
 
   render() {
     const {tooltip} = this.state;
-    const {data, hover} = this.props;
+    const {data, hover, leagueShootingPct} = this.props;
 
     return (
       <Div>
@@ -117,6 +117,7 @@ class ShotChart extends React.Component {
                 data={data}
                 hexbinPath={this.hexbinPath}
                 hexbinSize={this.hexbinSize}
+                leagueShootingPct={leagueShootingPct}
                 radius={this.radius}
                 scale={this.scales}
                 updateTooltip={this.updateTooltip}
@@ -153,6 +154,7 @@ ShotChart.propTypes = {
     distance: PropTypes.number.isRequired,
     toggle: PropTypes.bool.isRequired,
   }).isRequired,
+  leagueShootingPct: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
 export default ShotChart;

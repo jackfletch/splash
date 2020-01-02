@@ -1,45 +1,5 @@
 import {sum} from 'd3-array';
 
-// TODO: this should be an api call
-export const leagueAvgShootingPct = [
-  76.9,
-  58.1,
-  50.72,
-  42.07,
-  41.6,
-  40.86,
-  41.4,
-  41.85,
-  40.88,
-  40.56,
-  40.71,
-  40.35,
-  41.61,
-  40.37,
-  41.13,
-  42.25,
-  41.1,
-  41.24,
-  40.91,
-  39.8,
-  40.18,
-  37.12,
-  38.5,
-  38.52,
-  37.07,
-  35.42,
-  34.63,
-  32.67,
-  31.17,
-  28.32,
-  28.07,
-  20.83,
-  26.76,
-  17.54,
-  18.18,
-  12.0,
-];
-
 function ribbonShots(data, maxDistance) {
   const binnedShots = {};
   let totalMakes = 0;
