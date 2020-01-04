@@ -53,6 +53,7 @@ const Charts = ({playerId}) => {
       <ShootingSignature
         data={ribbonedData}
         hover={hover}
+        leagueShootingPct={leagueShootingPct}
         maxDistance={maxDistance}
       />
       <BarChart
