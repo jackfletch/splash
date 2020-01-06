@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {leagueAvgShootingPct} from '../../lib/ribbonShots';
 import {distance as euclideanDistance} from '../../lib';
 
 const resetTooltip = updateTooltip => {
@@ -38,6 +37,7 @@ const Hexagon = props => {
     data,
     hexbinPath,
     hexbinSize,
+    leagueShootingPct,
     scale,
     radius,
     updateTooltip,
@@ -47,8 +47,7 @@ const Hexagon = props => {
   const madeShots = data.reduce((a, b) => a + b[2], 0);
   const totalShots = data.length;
   const shootingPct = madeShots / totalShots;
-  const shootingPctAboveAvg =
-    shootingPct - leagueAvgShootingPct[distance] / 100;
+  const shootingPctAboveAvg = shootingPct - leagueShootingPct[distance];
   const color = colorScale(shootingPctAboveAvg);
 
   const tooltipProps = {
@@ -80,6 +79,7 @@ Hexagon.propTypes = {
   data: PropTypes.any.isRequired,
   hexbinPath: PropTypes.any.isRequired,
   hexbinSize: PropTypes.number.isRequired,
+  leagueShootingPct: PropTypes.arrayOf(PropTypes.number).isRequired,
   updateTooltip: PropTypes.func.isRequired,
   radius: PropTypes.func.isRequired,
   scale: PropTypes.shape({

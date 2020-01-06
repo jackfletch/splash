@@ -9,6 +9,7 @@ function Hexagons(props) {
     data,
     hexbinPath,
     hexbinSize,
+    leagueShootingPct,
     radius,
     scale,
     updateTooltip,
@@ -25,6 +26,7 @@ function Hexagons(props) {
           data={bin}
           hexbinPath={hexbinPath}
           hexbinSize={hexbinSize}
+          leagueShootingPct={leagueShootingPct}
           radius={radius}
           scale={scale}
           updateTooltip={updateTooltip}
@@ -38,6 +40,7 @@ Hexagons.propTypes = {
   data: PropTypes.any.isRequired,
   hexbinPath: PropTypes.any.isRequired,
   hexbinSize: PropTypes.number.isRequired,
+  leagueShootingPct: PropTypes.arrayOf(PropTypes.number).isRequired,
   updateTooltip: PropTypes.func.isRequired,
   radius: PropTypes.func.isRequired,
   scale: PropTypes.shape({

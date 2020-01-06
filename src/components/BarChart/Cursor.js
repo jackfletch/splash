@@ -18,12 +18,12 @@ const Cursor = ({x, datum, totalShots}) => {
         x={xLoc}
         y={30}
         style={{textAnchor: newTextAnchor, fontSize: '16px'}}
-      >{`${((100 * datum.y) / totalShots).toFixed(2)}%`}</text>
+      >{`${((100 * datum.total) / totalShots).toFixed(2)}%`}</text>
       <text
         x={xLoc}
         y={50}
         style={{textAnchor: newTextAnchor, fontSize: '14px'}}
-      >{`${datum.y} shot${datum.y === 1 ? '' : 's'}`}</text>
+      >{`${datum.total} shot${datum.total === 1 ? '' : 's'}`}</text>
       <text
         x={xLoc}
         y={65}
@@ -44,7 +44,7 @@ Cursor.propTypes = {
   x: PropTypes.number,
   datum: PropTypes.shape({
     x: PropTypes.number.isRequired,
-    y: PropTypes.number.isRequired,
+    total: PropTypes.number.isRequired,
   }),
   totalShots: PropTypes.number.isRequired,
 };

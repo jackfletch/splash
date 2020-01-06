@@ -44,18 +44,12 @@ const Svg = styled.svg`
   width: 100%;
 `;
 
-const findDomain = data => {
-  const maxX = Math.max(...data.map(d => d.x));
-  const minX = Math.min(...data.map(d => d.x));
-  return [minX, maxX];
-};
-
-const calculateGradientData = data => {
+const calculateGradientData = (data, leagueShootingPct, maxDistance) => {
   const offset = scaleLinear()
-    .domain(findDomain(data))
+    .domain([0, maxDistance])
     .range([0, 100]);
 
-  const colorScale = scaleSequential(interpolatePlasma).domain([-0.25, 0.25]);
+  const colorScale = scaleSequential(interpolatePlasma).domain([-0.15, 0.15]);
 
   const colorData = [];
   const stripe = false; // set stripe to true to prevent linear gradient fading
@@ -63,14 +57,16 @@ const calculateGradientData = data => {
     const prevData = data[i - 1];
     const currData = data[i];
     if (stripe && prevData) {
+      const prevColor = prevData.shootingPct - leagueShootingPct[i - 1];
       colorData.push({
-        offset: `${offset(currData.x)}%`,
-        stopColor: colorScale(prevData.colorValue),
+        offset: `${offset(i)}%`,
+        stopColor: colorScale(prevColor),
       });
     }
+    const currColor = currData.shootingPct - leagueShootingPct[i];
     colorData.push({
-      offset: `${offset(currData.x)}%`,
-      stopColor: colorScale(currData.colorValue),
+      offset: `${offset(i)}%`,
+      stopColor: colorScale(currColor),
     });
   }
   return colorData;
@@ -83,7 +79,7 @@ const width = svgWidth - margin.left - margin.right;
 const height = svgHeight - margin.top - margin.bottom;
 
 const ShootingSignature = props => {
-  const {data, hover, maxDistance} = props;
+  const {data, hover, leagueShootingPct, maxDistance} = props;
 
   const x = scaleLinear()
     .domain([0, maxDistance])
@@ -94,21 +90,21 @@ const ShootingSignature = props => {
     .range([height, 0]);
 
   const w = scaleLinear()
-    .domain([0, height])
-    .range([0, 0.4]);
+    .domain([0, 1])
+    .range([1, height]);
 
   const areaAbove = area()
-    .x(d => x(d.x))
-    .y0(d => y(d.y) - w(d.widthValue))
-    .y1(d => Math.ceil(y(d.y))) // ceil and floor prevent line between areas
+    .x((d, i) => x(i))
+    .y0(d => y(d.shootingPct) - w(d.width))
+    .y1(d => Math.ceil(y(d.shootingPct))) // ceil and floor prevent line between areas
     .curve(curveBasis);
   const areaBelow = area()
-    .x(d => x(d.x))
-    .y0(d => y(d.y) + w(d.widthValue))
-    .y1(d => Math.floor(y(d.y))) // ceil and floor prevent line between areas
+    .x((d, i) => x(i))
+    .y0(d => y(d.shootingPct) + w(d.width))
+    .y1(d => Math.floor(y(d.shootingPct))) // ceil and floor prevent line between areas
     .curve(curveBasis);
 
-  const colorData = calculateGradientData(data);
+  const colorData = calculateGradientData(data, leagueShootingPct, maxDistance);
 
   const gradientId = 'signaturegradient';
   return (
@@ -147,16 +143,15 @@ const ShootingSignature = props => {
 ShootingSignature.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.exact({
-      x: PropTypes.number.isRequired,
-      y: PropTypes.number.isRequired,
-      widthValue: PropTypes.number.isRequired,
-      colorValue: PropTypes.number.isRequired,
+      shootingPct: PropTypes.number.isRequired,
+      width: PropTypes.number.isRequired,
     })
   ).isRequired,
   hover: PropTypes.exact({
     distance: PropTypes.number.isRequired,
     toggle: PropTypes.bool.isRequired,
   }).isRequired,
+  leagueShootingPct: PropTypes.arrayOf(PropTypes.number).isRequired,
   maxDistance: PropTypes.number.isRequired,
 };
 
