@@ -22,13 +22,13 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.3.0",
     "styled-components": "^4.4.1",
-    "victory": "^33.1.7"
+    "victory": "^34.0.0"
   },
   "devDependencies": {
-    "eslint": "^6.7.2",
+    "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.0.1",
-    "eslint-config-prettier": "^6.7.0",
-    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-plugin-prettier": "^3.1.2",
     "prettier": "^1.19.1",
     "prettier-eslint": "^9.0.1"
   },
