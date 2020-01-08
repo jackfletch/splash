@@ -12,28 +12,14 @@ const Div = styled.div`
   }
 `;
 
-const H2 = styled.h2`
+const H1 = styled.h1`
   color: midnightblue;
-  padding: 0 0;
-  margin: 0;
-`;
-
-const Ul = styled.ul`
-  margin: 0;
 `;
 
 const App = () => (
   <Router>
     <Div className="App">
-      <h1>Splash</h1>
-      <p>a basketball shotchart generator</p>
-      <p>this is a work in progress</p>
-      <H2>TODO:</H2>
-      <Ul>
-        <li>add fancy player selection</li>
-        <li>add more charts</li>
-        <li>style everything</li>
-      </Ul>
+      <H1>Splash</H1>
       <ChartDashboard />
       <Footer />
     </Div>

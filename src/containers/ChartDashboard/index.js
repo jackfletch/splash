@@ -1,14 +1,9 @@
 import React, {useState} from 'react';
-import styled from 'styled-components';
 import {useRouteMatch} from 'react-router-dom';
 
 import Charts from '../Charts';
 import PlayerSelector from '../../components/PlayerSelector';
 import {usePlayersApi} from '../../hooks';
-
-const Title = styled.h1`
-  color: midnightblue;
-`;
 
 export default function ChartDashboard() {
   const [players] = usePlayersApi();
@@ -30,7 +25,6 @@ export default function ChartDashboard() {
 
   return (
     <div>
-      <Title>Chart Dashboard</Title>
       <PlayerSelector
         player={playerId}
         players={players}
