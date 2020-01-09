@@ -2,7 +2,6 @@ import styled from 'styled-components';
 
 const ChartDiv = styled.div`
   flex: 1;
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-self: stretch;

@@ -1,5 +1,15 @@
 @import url('https://fonts.googleapis.com/css?family=Lato:300,400,500,700');
 
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Lato", "Segoe UI", "Roboto", "Oxygen",
