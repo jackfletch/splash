@@ -6,20 +6,10 @@ import {scaleLinear, scaleSequential, scaleSqrt} from 'd3-scale';
 import {interpolatePlasma} from 'd3-scale-chromatic';
 
 import Court from '../Court';
+import ChartDiv from '../ChartDiv';
 import Hexagons from '../Hexagons';
 import ShotchartCursor from './ShotchartCursor';
 import Tooltip from '../Tooltip';
-
-const Div = styled.div`
-  flex: 1;
-  box-sizing: border-box;
-  display: flex;
-  align-self: stretch;
-  align-items: center;
-  height: auto;
-  width: 100%;
-  z-index: 1;
-`;
 
 const Svg = styled.svg`
   display: block;
@@ -89,7 +79,7 @@ class ShotChart extends React.Component {
     const {data, hover, leagueShootingPct} = this.props;
 
     return (
-      <Div>
+      <ChartDiv>
         <Svg
           display="block"
           height="100%"
@@ -132,7 +122,7 @@ class ShotChart extends React.Component {
             {tooltip.show ? <Tooltip vals={tooltip} /> : null}
           </g>
         </Svg>
-      </Div>
+      </ChartDiv>
     );
   }
 }

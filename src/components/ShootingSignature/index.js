@@ -5,21 +5,11 @@ import {interpolatePlasma} from 'd3-scale-chromatic';
 import {area, curveBasis} from 'd3-shape';
 import styled from 'styled-components';
 
+import ChartDiv from '../ChartDiv';
 import ChartTitle from '../ChartTitle';
 import Cursor from './Cursor';
 import Gradient from './Gradient';
 
-const Div = styled.div`
-  flex: 1;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-self: stretch;
-  align-items: center;
-  height: auto;
-  width: 100%;
-  min-width: 15rem;
-`;
 const Div2 = styled.div`
   flex: 1;
   box-sizing: border-box;
@@ -102,7 +92,7 @@ const ShootingSignature = props => {
 
   const gradientId = 'signaturegradient';
   return (
-    <Div>
+    <ChartDiv>
       <ChartTitle>Shooting Signature</ChartTitle>
       <Div2>
         <Svg
@@ -130,7 +120,7 @@ const ShootingSignature = props => {
           </g>
         </Svg>
       </Div2>
-    </Div>
+    </ChartDiv>
   );
 };
 

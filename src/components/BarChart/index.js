@@ -10,20 +10,10 @@ import {
 } from 'victory';
 
 import theme from '../victorytheme';
+import ChartDiv from '../ChartDiv';
 import ChartTitle from '../ChartTitle';
 import Cursor from './Cursor';
 
-const Div = styled.div`
-  flex: 1;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-self: stretch;
-  align-items: center;
-  height: auto;
-  width: 100%;
-  min-width: 15rem;
-`;
 const Div2 = styled.div`
   flex: 1;
   box-sizing: border-box;
@@ -155,7 +145,7 @@ const BarChart = props => {
   ]);
 
   return (
-    <Div>
+    <ChartDiv>
       <ChartTitle>Shot Frequency by Distance</ChartTitle>
       <Div2>
         <VictoryChart
@@ -219,7 +209,7 @@ const BarChart = props => {
           />
         </VictoryChart>
       </Div2>
-    </Div>
+    </ChartDiv>
   );
 };
 
