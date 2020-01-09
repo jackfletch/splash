@@ -5,6 +5,7 @@ import {interpolatePlasma} from 'd3-scale-chromatic';
 import {area, curveBasis} from 'd3-shape';
 import styled from 'styled-components';
 
+import ChartTitle from '../ChartTitle';
 import Cursor from './Cursor';
 import Gradient from './Gradient';
 
@@ -28,13 +29,6 @@ const Div2 = styled.div`
   height: auto;
   width: 100%;
   position: relative;
-`;
-
-const ChartTitle = styled.h3`
-  color: black;
-  font-size: 1.75em;
-  font-weight: normal;
-  margin-bottom: 0;
 `;
 
 const Svg = styled.svg`

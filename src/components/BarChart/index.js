@@ -10,6 +10,7 @@ import {
 } from 'victory';
 
 import theme from '../victorytheme';
+import ChartTitle from '../ChartTitle';
 import Cursor from './Cursor';
 
 const Div = styled.div`
@@ -31,13 +32,6 @@ const Div2 = styled.div`
   align-items: center;
   height: auto;
   width: 100%;
-`;
-
-const ChartTitle = styled.h3`
-  color: black;
-  font-size: 1.75em;
-  font-weight: normal;
-  margin-bottom: 0;
 `;
 
 const GRAY_COLOR = '#2b3137';
