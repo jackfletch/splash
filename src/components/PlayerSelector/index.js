@@ -18,7 +18,7 @@ const PlayerSelector = ({player, players, setPlayerId}) => {
         >
           {players.map(d => (
             <option key={d.id} value={d.id}>
-              {d.name}
+              {d.name_first_last}
             </option>
           ))}
         </select>
@@ -30,9 +30,10 @@ const PlayerSelector = ({player, players, setPlayerId}) => {
 PlayerSelector.propTypes = {
   player: PropTypes.number.isRequired,
   players: PropTypes.arrayOf(
-    PropTypes.exact({
+    PropTypes.shape({
       id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
+      name_last_first: PropTypes.string.isRequired,
+      name_first_last: PropTypes.string.isRequired,
     })
   ).isRequired,
   setPlayerId: PropTypes.func.isRequired,
