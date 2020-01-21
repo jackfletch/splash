@@ -14,7 +14,7 @@ function Hexagons(props) {
     scale,
     updateTooltip,
   } = props;
-  const shots = data.map(shot => [shot.x, shot.y, shot.made_flag]);
+  const shots = data.map(shot => [shot.x, shot.y, shot.made]);
 
   return (
     hexbinPath(shots)

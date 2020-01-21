@@ -6,19 +6,20 @@ const PlayerSelector = ({player, players, setPlayerId}) => {
   const history = useHistory();
   return (
     <form>
-      <label htmlFor="select1">
-        Select
+      <label htmlFor="playerselector">
+        Player{' '}
         <select
+          id="playerselector"
           value={player}
           onChange={e => {
             const playerId = parseInt(e.target.value);
-            history.push(`/players/${playerId}`);
+            history.push(`/players/${playerId}${history.location.search}`);
             setPlayerId(playerId);
           }}
         >
           {players.map(d => (
             <option key={d.id} value={d.id}>
-              {d.name}
+              {d.name_first_last}
             </option>
           ))}
         </select>
@@ -30,9 +31,10 @@ const PlayerSelector = ({player, players, setPlayerId}) => {
 PlayerSelector.propTypes = {
   player: PropTypes.number.isRequired,
   players: PropTypes.arrayOf(
-    PropTypes.exact({
+    PropTypes.shape({
       id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
+      name_last_first: PropTypes.string.isRequired,
+      name_first_last: PropTypes.string.isRequired,
     })
   ).isRequired,
   setPlayerId: PropTypes.func.isRequired,
