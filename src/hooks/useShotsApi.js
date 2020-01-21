@@ -2,24 +2,28 @@ import {useEffect, useState} from 'react';
 import axios from 'axios';
 import {binShots, ribbonShots} from '@jackfletch/splash-vis-utils';
 
-function useShotsApi(playerId, maxDistance) {
+function useShotsApi(playerId, seasonId, maxDistance) {
   const [data, setData] = useState(undefined);
   const [ribbonedData, setRibbonedData] = useState([]);
   const [binnedData, setBinnedData] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
-      const endpoint =
+      const origin =
         process.env.NODE_ENV === 'development'
-          ? `http://localhost:5000/api/shots/${playerId}`
-          : `https://splash.jackfletch.com/api/shots/${playerId}`;
+          ? 'http://localhost:5000'
+          : 'https://splash.jackfletch.com';
+
+      const endpoint = new URL(origin);
+      endpoint.pathname = `/api/shots/player/${playerId}/season/${seasonId}`;
+
       const res = await axios.get(endpoint);
       setData(res.data);
       setRibbonedData(ribbonShots(res.data, maxDistance));
       setBinnedData(binShots(res.data, maxDistance));
     };
     fetchData();
-  }, [playerId, maxDistance]);
+  }, [playerId, seasonId, maxDistance]);
 
   return [{data, ribbonedData, binnedData}];
 }

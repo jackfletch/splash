@@ -6,13 +6,14 @@ const PlayerSelector = ({player, players, setPlayerId}) => {
   const history = useHistory();
   return (
     <form>
-      <label htmlFor="select1">
-        Select
+      <label htmlFor="playerselector">
+        Player{' '}
         <select
+          id="playerselector"
           value={player}
           onChange={e => {
             const playerId = parseInt(e.target.value);
-            history.push(`/players/${playerId}`);
+            history.push(`/players/${playerId}${history.location.search}`);
             setPlayerId(playerId);
           }}
         >

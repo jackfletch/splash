@@ -16,12 +16,16 @@ const ChartsDiv = styled.div`
   ${media.tablet`flex-direction: column;`}
 `;
 
-const Charts = ({playerId}) => {
+const Charts = ({playerId, seasonId}) => {
   const maxDistance = 35;
   const [activated, setActivated] = useState(0);
   const [deactivated, setDeactivated] = useState(0);
   const [leagueShootingPct] = useLeagueShootingPctApi(maxDistance);
-  const [{data, ribbonedData, binnedData}] = useShotsApi(playerId, maxDistance);
+  const [{data, ribbonedData, binnedData}] = useShotsApi(
+    playerId,
+    seasonId,
+    maxDistance
+  );
 
   if (
     leagueShootingPct.length === 0 ||
@@ -69,6 +73,7 @@ const Charts = ({playerId}) => {
 
 Charts.propTypes = {
   playerId: PropTypes.number,
+  seasonId: PropTypes.number,
 };
 
 export default Charts;
