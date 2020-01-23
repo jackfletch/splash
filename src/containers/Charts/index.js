@@ -6,7 +6,9 @@ import media from '../../components/style-utils';
 
 import HexShotchart from '../../components/HexShotchart';
 import ShootingSignature from '../../components/ShootingSignature';
-import BarChart from '../../components/BarChart';
+import BarChart, {
+  functions as barChartFunctions,
+} from '../../components/BarChart';
 import {useShotsApi, useLeagueShootingPctApi} from '../../hooks';
 
 const ChartsDiv = styled.div`
@@ -63,9 +65,23 @@ const Charts = ({playerId, seasonId}) => {
       <BarChart
         data={binnedData}
         hover={hover}
+        label={barChartFunctions.shotProportion.labeler}
         maxDistance={maxDistance}
         setActivated={setActivated}
         setDeactivated={setDeactivated}
+        title="Shot Proportion by Distance"
+        y={barChartFunctions.shotProportion.accessor}
+      />
+      <BarChart
+        data={binnedData}
+        domain={[0, 100]}
+        hover={hover}
+        label={barChartFunctions.fieldGoalPercentage.labeler}
+        maxDistance={maxDistance}
+        setActivated={setActivated}
+        setDeactivated={setDeactivated}
+        title="Field Goal Percentage by Distance"
+        y={barChartFunctions.fieldGoalPercentage.accessor}
       />
     </ChartsDiv>
   );

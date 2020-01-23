@@ -1,7 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-const Cursor = ({x, datum, totalShots}) => {
+const Text = styled.text`
+  font-size: ${props => (props.main ? 1 : 0.875)}rem;
+  text-anchor: ${props => props.textAnchor};
+`;
+
+const Cursor = props => {
+  const {x, datum, labeler, totalShots} = props;
   let xLoc;
   let newTextAnchor;
 
@@ -12,23 +19,23 @@ const Cursor = ({x, datum, totalShots}) => {
     xLoc = x - 10;
     newTextAnchor = 'end';
   }
+
+  const {counts, pct} = labeler(totalShots)(datum);
+  const pctText = `${pct}%`;
+  const countText = `~ ${counts.num} / ${counts.denom}`;
+  const distanceText = `@ ${datum.x} ft`;
+
   return (
     <g>
-      <text
-        x={xLoc}
-        y={30}
-        style={{textAnchor: newTextAnchor, fontSize: '16px'}}
-      >{`${((100 * datum.total) / totalShots).toFixed(2)}%`}</text>
-      <text
-        x={xLoc}
-        y={50}
-        style={{textAnchor: newTextAnchor, fontSize: '14px'}}
-      >{`${datum.total} shot${datum.total === 1 ? '' : 's'}`}</text>
-      <text
-        x={xLoc}
-        y={65}
-        style={{textAnchor: newTextAnchor, fontSize: '14px'}}
-      >{`@ ${datum.x} ft`}</text>
+      <Text main x={xLoc} y={32} textAnchor={newTextAnchor}>
+        {pctText}
+      </Text>
+      <Text x={xLoc} y={50} textAnchor={newTextAnchor}>
+        {countText}
+      </Text>
+      <Text x={xLoc} y={68} textAnchor={newTextAnchor}>
+        {distanceText}
+      </Text>
       <path
         d={`M${x},250 L${x},20`}
         style={{
@@ -46,6 +53,7 @@ Cursor.propTypes = {
     x: PropTypes.number.isRequired,
     total: PropTypes.number.isRequired,
   }),
+  labeler: PropTypes.func.isRequired,
   totalShots: PropTypes.number.isRequired,
 };
 

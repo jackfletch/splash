@@ -25,31 +25,14 @@ const Div2 = styled.div`
 `;
 
 const GRAY_COLOR = '#2b3137';
-const RED_COLOR = '#7c270b';
 const styles = {
   parent: {
-    background: '#dddddd',
     boxSizing: 'border-box',
     display: 'inline',
     padding: 0,
     width: '100%',
     height: 'auto',
   },
-  title: {
-    textAnchor: 'start',
-    verticalAnchor: 'end',
-    fill: '#000000',
-    fontFamily: 'inherit',
-    fontSize: '18px',
-    fontWeight: 'bold',
-  },
-  labelNumber: {
-    textAnchor: 'middle',
-    fill: '#ffffff',
-    fontFamily: 'inherit',
-    fontSize: '14px',
-  },
-
   // INDEPENDENT AXIS
   axisX: {
     axis: {stroke: GRAY_COLOR, strokeWidth: 1},
@@ -82,45 +65,8 @@ const styles = {
       fontSize: 14,
     },
   },
-  labelOne: {
-    fill: GRAY_COLOR,
-    fontFamily: 'inherit',
-    fontSize: 14,
-    fontStyle: 'italic',
-  },
   lineOne: {
     data: {fill: 'rgba(43, 49, 55, 0.5)', strokeWidth: 0},
-  },
-  axisOneCustomLabel: {
-    fill: GRAY_COLOR,
-    fontFamily: 'inherit',
-    fontWeight: 300,
-    fontSize: 21,
-  },
-
-  // DATA SET TWO
-  axisTwo: {
-    axis: {stroke: RED_COLOR, strokeWidth: 0},
-    tickLabels: {
-      fill: RED_COLOR,
-      fontFamily: 'inherit',
-      fontSize: 16,
-    },
-  },
-  labelTwo: {
-    textAnchor: 'end',
-    fill: RED_COLOR,
-    fontFamily: 'inherit',
-    fontSize: 12,
-    fontStyle: 'italic',
-  },
-  lineTwo: {
-    data: {stroke: RED_COLOR, strokeWidth: 4.5},
-  },
-
-  // HORIZONTAL LINE
-  lineThree: {
-    data: {stroke: '#e95f46', strokeWidth: 2},
   },
 };
 
@@ -129,35 +75,55 @@ const getTickValues = maxDistance =>
     .fill()
     .map((val, i) => i * 5);
 
-const findMaxY = data => {
+const findMaxY = (data, yAccessor) => {
   const {bins, totalShots} = data;
-  const maxShots = Math.max(...bins.map(d => d.total));
-  const maxPct = (maxShots * 100) / totalShots;
-  return Math.ceil(maxPct / 5) * 5;
+  const yValues = bins.map(yAccessor(totalShots)).filter(y => !Number.isNaN(y));
+  const max = Math.max(...yValues);
+  return Math.ceil(max / 5) * 5;
+};
+
+const PercentAxisTickLabel = props => {
+  const {text, ...otherProps} = props;
+  return (
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    <VictoryLabel {...otherProps} text={`${text}%`} />
+  );
+};
+
+PercentAxisTickLabel.propTypes = {
+  text: PropTypes.string,
 };
 
 const BarChart = props => {
-  const {data, hover, maxDistance, setActivated, setDeactivated} = props;
+  const {
+    data,
+    domain,
+    hover,
+    label,
+    maxDistance,
+    setActivated,
+    setDeactivated,
+    title,
+    y,
+  } = props;
   const tickValues = getTickValues(maxDistance);
-  const maxY = findMaxY(data);
+  const maxY = findMaxY(data, y);
   const victoryData = useMemo(() => data.bins.map((d, i) => ({...d, x: i})), [
     data,
   ]);
 
   return (
     <ChartDiv>
-      <ChartTitle>Shot Frequency by Distance</ChartTitle>
+      <ChartTitle>{title}</ChartTitle>
       <Div2>
         <VictoryChart
           containerComponent={
             <VictoryVoronoiContainer
               voronoiDimension="x"
-              labels={d =>
-                `shot freq %: ${((100 * d.total) / data.totalShots).toFixed(
-                  2
-                )}%`
+              labels={d => d}
+              labelComponent={
+                <Cursor totalShots={data.totalShots} labeler={label} />
               }
-              labelComponent={<Cursor totalShots={data.totalShots} />}
               onActivated={points => {
                 setActivated(points[0].x);
               }}
@@ -188,15 +154,15 @@ const BarChart = props => {
           />
           <VictoryAxis
             dependentAxis
-            domain={[0, maxY]}
+            domain={domain ?? [0, maxY]}
             orientation="left"
             standalone={false}
             style={styles.axisOne}
-            tickLabelComponent={<VictoryLabel dx={5} />}
+            tickLabelComponent={<PercentAxisTickLabel dx={5} />}
           />
           <VictoryBar
             data={victoryData}
-            y={d => (100 * d.total) / data.totalShots}
+            y={y(data.totalShots)}
             x={d => d.x + 0.5}
             domain={{
               x: [0, maxDistance],
@@ -225,13 +191,18 @@ BarChart.propTypes = {
     totalShots: PropTypes.number.isRequired,
     totalShotsWithinMaxDistance: PropTypes.number.isRequired,
   }).isRequired,
+  domain: PropTypes.arrayOf(PropTypes.number),
   hover: PropTypes.exact({
     distance: PropTypes.number.isRequired,
     toggle: PropTypes.bool.isRequired,
   }).isRequired,
+  label: PropTypes.func.isRequired,
   maxDistance: PropTypes.number.isRequired,
   setActivated: PropTypes.func.isRequired,
   setDeactivated: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+  y: PropTypes.func.isRequired,
 };
 
 export default BarChart;
+export {default as functions} from './functions';
