@@ -1,13 +1,29 @@
 # Splash
 
 A web app for visualizing National Basketball Association shooting statistics.
-Though currently under development, check it out at https://splash.jackfletch.com.
+Though under active development, check it out at https://splash.jackfletch.com.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Other Code
+
+The utility functions for transforming the data are extracted to their own package, [@jackfletch/splash-vis-utils].
+
+The database schema and ETL functions are in [@jackfletch/splash-db].
 
 ## TODO
 
-- add fancy player selection
+- add an ergonomic player selection
 - add more charts
-- style everything consistently
+- design a proper layout
+- style consistently
 - refactor to React hooks
+- create routes for different chart views
+  - player view
+  - player career view
+  - compare players view
+  - team view
+  - compare team view
+  - season view
+  - compare season view
+
+[@jackfletch/splash-vis-utils]: https://github.com/jackfletch/splash-vis-utils
+[@jackfletch/splash-db]: https://github.com/jackfletch/splash-db
