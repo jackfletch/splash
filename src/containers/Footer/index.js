@@ -7,6 +7,9 @@ const Footer = styled.footer`
   font-size: 14px;
   color: #555;
   padding-top: 10px;
+  small {
+    font-size: 0.75rem;
+  }
 `;
 const A = styled.a`
   text-decoration: none;
@@ -16,13 +19,25 @@ const A = styled.a`
 const FooterComponent = () => (
   <Footer>
     <p>
+      Made with{' '}
+      <span role="img" aria-label="love">
+        ❤️
+      </span>{' '}
+      by <A href="https://jackfletch.com">Jack Fletcher</A>
+    </p>
+    <p>
+      Follow development on{' '}
+      <A href="https://github.com/jackfletch/splash">GitHub</A>!
+    </p>
+    <p>
       <small>
-        &copy; 2019 <A href="https://jackfletch.com">Jack Fletcher</A>
+        Raw data from <A href="https://stats.nba.com">stats.nba.com</A>
       </small>
     </p>
     <p>
       <small>
-        Basketball data from <A href="https://stats.nba.com">stats.nba.com</A>
+        My apologies for the lack of visualization of the uncertainty in the
+        data. Good thing it&apos;s just basketball.
       </small>
     </p>
   </Footer>
