@@ -22,7 +22,7 @@ const Charts = ({playerId, seasonId}) => {
   const maxDistance = 35;
   const [activated, setActivated] = useState(0);
   const [deactivated, setDeactivated] = useState(0);
-  const [leagueShootingPct] = useLeagueShootingPctApi(maxDistance);
+  const [leagueShootingPct] = useLeagueShootingPctApi(maxDistance, seasonId);
   const [{data, ribbonedData, binnedData}] = useShotsApi(
     playerId,
     seasonId,
