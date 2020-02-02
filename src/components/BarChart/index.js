@@ -1,5 +1,6 @@
 import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
+import {scaleLinear} from 'd3-scale';
 import styled from 'styled-components';
 import {
   VictoryChart,
@@ -106,6 +107,19 @@ const BarChart = props => {
     title,
     y,
   } = props;
+  const {height, padding, width} = theme.area;
+
+  const xScale = scaleLinear()
+    .domain([0, maxDistance])
+    .range([padding.left, width - padding.right]);
+  const yScale = scaleLinear()
+    .domain([0, 1])
+    .range([height, 0]);
+  const scales = {
+    x: xScale,
+    y: yScale,
+  };
+
   const tickValues = getTickValues(maxDistance);
   const maxY = findMaxY(data, y);
   const victoryData = useMemo(() => data.bins.map((d, i) => ({...d, x: i})), [
@@ -120,10 +134,6 @@ const BarChart = props => {
           containerComponent={
             <VictoryVoronoiContainer
               voronoiDimension="x"
-              labels={d => d}
-              labelComponent={
-                <Cursor totalShots={data.totalShots} labeler={label} />
-              }
               onActivated={points => {
                 setActivated(points[0].x);
               }}
@@ -173,6 +183,14 @@ const BarChart = props => {
             standalone={false}
             style={styles.lineOne}
           />
+          {hover.toggle && hover.distance >= 0 && (
+            <Cursor
+              x={scales.x(hover.distance + 0.5)}
+              datum={{x: hover.distance, ...data.bins[hover.distance]}}
+              totalShots={data.totalShots}
+              labeler={label}
+            />
+          )}
         </VictoryChart>
       </Div2>
     </ChartDiv>
