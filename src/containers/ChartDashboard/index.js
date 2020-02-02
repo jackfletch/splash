@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {useRouteMatch} from 'react-router-dom';
 
 import Charts from '../Charts';
+import PlayerImage from '../../components/PlayerImage';
 import PlayerSelector from '../../components/PlayerSelector';
 import SeasonSelector from '../../components/SeasonSelector';
 import {
@@ -41,6 +42,7 @@ export default function ChartDashboard() {
 
   return (
     <div>
+      <PlayerImage player={playerId} />
       <PlayerSelector
         player={playerId}
         players={players}
