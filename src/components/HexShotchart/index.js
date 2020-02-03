@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {hexbin} from 'd3-hexbin';
@@ -19,113 +19,84 @@ const Svg = styled.svg`
   overflow: visible !important;
 `;
 
-class ShotChart extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      tooltip: {
-        color: 'none',
-        makes: '',
-        opacity: 0,
-        shots: '',
-        show: false,
-        transform: '',
-      },
-    };
-    this.margin = {top: 20, right: 20, bottom: 20, left: 20};
-    this.svgWidth = 540;
-    this.svgHeight = 500;
-    this.width = this.svgWidth - this.margin.left - this.margin.right;
-    this.height = this.svgHeight - this.margin.top - this.margin.bottom;
-    this.backgroundColor = '#ddd';
-    this.hexbinSize = 10;
+const ShotChart = props => {
+  const [tooltip, setTooltip] = useState({
+    color: 'none',
+    makes: '',
+    opacity: 0,
+    shots: '',
+    show: false,
+    transform: '',
+  });
+  const margin = {top: 20, right: 20, bottom: 20, left: 20};
+  const svgWidth = 540;
+  const svgHeight = 500;
+  const width = svgWidth - margin.left - margin.right;
+  const height = svgHeight - margin.top - margin.bottom;
+  const backgroundColor = '#ddd';
+  const hexbinSize = 10;
 
-    this.xScale = scaleLinear()
-      .domain([-250, 250])
-      .range([0, this.width]);
-    this.yScale = scaleLinear()
-      .domain([-52.5, 417.5])
-      .range([this.height, 0]);
-    this.scales = {
-      x: this.xScale,
-      y: this.yScale,
-    };
+  const xScale = scaleLinear()
+    .domain([-250, 250])
+    .range([0, width]);
+  const yScale = scaleLinear()
+    .domain([-52.5, 417.5])
+    .range([height, 0]);
+  const scales = {
+    x: xScale,
+    y: yScale,
+  };
 
-    this.radius = scaleSqrt()
-      .domain([0, 50])
-      .range([0, 10]);
-    this.color = scaleSequential(interpolatePlasma).domain([-0.15, 0.15]);
-    this.hexbinPath = hexbin()
-      .size([this.width, this.height])
-      .radius(this.hexbinSize);
-    this.updateTooltip = this.updateTooltip.bind(this);
-  }
+  const radius = scaleSqrt()
+    .domain([0, 50])
+    .range([0, 10]);
+  const color = scaleSequential(interpolatePlasma).domain([-0.15, 0.15]);
+  const hexbinPath = hexbin()
+    .size([width, height])
+    .radius(hexbinSize);
 
-  updateTooltip(e) {
-    this.setState({
-      tooltip: {
-        color: e.color,
-        makes: e.makes,
-        opacity: e.opacity,
-        shots: e.shots,
-        show: e.show,
-        transform: e.transform,
-      },
-    });
-  }
+  const {data, hover, leagueShootingPct} = props;
 
-  render() {
-    const {tooltip} = this.state;
-    const {data, hover, leagueShootingPct} = this.props;
-
-    return (
-      <ChartDiv>
-        <Svg
-          display="block"
-          height="100%"
-          width="100%"
-          viewBox={`0 0 ${this.width} ${this.height}`}
-          preserveAspectRatio="xMidYMid meet"
-        >
-          <g>
-            <rect
-              x={this.xScale(-250)}
-              y={this.yScale(417.5)}
-              width={this.width}
-              height={this.height}
-              fill={this.backgroundColor}
-              stroke="none"
+  return (
+    <ChartDiv>
+      <Svg
+        display="block"
+        height="100%"
+        width="100%"
+        viewBox={`0 0 ${width} ${height}`}
+        preserveAspectRatio="xMidYMid meet"
+      >
+        <g>
+          <rect
+            x={xScale(-250)}
+            y={yScale(417.5)}
+            width={width}
+            height={height}
+            fill={backgroundColor}
+            stroke="none"
+          />
+          <Court width={width} height={height} scale={scales} />
+          <g clipPath="url(#clip)">
+            <Hexagons
+              color={color}
+              data={data}
+              hexbinPath={hexbinPath}
+              hexbinSize={hexbinSize}
+              leagueShootingPct={leagueShootingPct}
+              radius={radius}
+              scale={scales}
+              updateTooltip={setTooltip}
             />
-            <Court
-              width={this.width}
-              height={this.height}
-              scale={this.scales}
-            />
-            <g clipPath="url(#clip)">
-              <Hexagons
-                color={this.color}
-                data={data}
-                hexbinPath={this.hexbinPath}
-                hexbinSize={this.hexbinSize}
-                leagueShootingPct={leagueShootingPct}
-                radius={this.radius}
-                scale={this.scales}
-                updateTooltip={this.updateTooltip}
-              />
-            </g>
-            {hover.toggle && hover.distance >= 0 ? (
-              <ShotchartCursor
-                hoverDistance={hover.distance}
-                scale={this.scales}
-              />
-            ) : null}
-            {tooltip.show ? <Tooltip vals={tooltip} /> : null}
           </g>
-        </Svg>
-      </ChartDiv>
-    );
-  }
-}
+          {hover.toggle && hover.distance >= 0 ? (
+            <ShotchartCursor hoverDistance={hover.distance} scale={scales} />
+          ) : null}
+          {tooltip.show ? <Tooltip vals={tooltip} /> : null}
+        </g>
+      </Svg>
+    </ChartDiv>
+  );
+};
 
 ShotChart.propTypes = {
   data: PropTypes.arrayOf(

@@ -49,4 +49,7 @@ Hexagons.propTypes = {
   }).isRequired,
 };
 
-export default React.memo(Hexagons);
+export default React.memo(
+  Hexagons,
+  (prevProps, nextProps) => prevProps.data === nextProps.data
+);
