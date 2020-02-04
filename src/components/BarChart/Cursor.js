@@ -51,9 +51,13 @@ const Cursor = props => {
 };
 
 Cursor.propTypes = {
-  datum: PropTypes.shape({
-    total: PropTypes.number.isRequired,
-  }),
+  datum: PropTypes.oneOfType([
+    PropTypes.exact({
+      made: PropTypes.number.isRequired,
+      total: PropTypes.number.isRequired,
+    }),
+    PropTypes.exact({}),
+  ]),
   labeler: PropTypes.func.isRequired,
   scale: PropTypes.shape({
     x: PropTypes.func.isRequired,
