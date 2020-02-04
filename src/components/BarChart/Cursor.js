@@ -4,6 +4,8 @@ import styled from 'styled-components';
 
 import {useHoverState} from '../../hooks';
 
+const distanceFlipCursorOrientation = 30;
+
 const Text = styled.text`
   font-size: ${props => (props.main ? 1 : 0.875)}rem;
   text-anchor: ${props => props.textAnchor};
@@ -14,16 +16,10 @@ const Cursor = props => {
   const hover = useHoverState();
 
   const x = scale.x(hover.distance + 0.5);
-  let xLoc;
-  let newTextAnchor;
 
-  if (hover.distance < 30) {
-    xLoc = x + 10;
-    newTextAnchor = 'start';
-  } else {
-    xLoc = x - 10;
-    newTextAnchor = 'end';
-  }
+  const textAnchor =
+    hover.distance < distanceFlipCursorOrientation ? 'start' : 'end';
+  const dx = hover.distance < distanceFlipCursorOrientation ? x + 10 : x - 10;
 
   const {counts, pct} = labeler(totalShots)(datum);
   const pctText = `${pct}%`;
@@ -33,13 +29,13 @@ const Cursor = props => {
   return (
     hover.toggle && (
       <g>
-        <Text main x={xLoc} y={32} textAnchor={newTextAnchor}>
+        <Text main x={dx} y={32} textAnchor={textAnchor}>
           {pctText}
         </Text>
-        <Text x={xLoc} y={50} textAnchor={newTextAnchor}>
+        <Text x={dx} y={50} textAnchor={textAnchor}>
           {countText}
         </Text>
-        <Text x={xLoc} y={68} textAnchor={newTextAnchor}>
+        <Text x={dx} y={68} textAnchor={textAnchor}>
           {distanceText}
         </Text>
         <path
