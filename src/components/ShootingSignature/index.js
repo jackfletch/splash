@@ -5,6 +5,7 @@ import {interpolatePlasma} from 'd3-scale-chromatic';
 import {area, curveBasis} from 'd3-shape';
 import styled from 'styled-components';
 
+import {useHoverState} from '../../hooks';
 import ChartDiv from '../ChartDiv';
 import ChartTitle from '../ChartTitle';
 import Cursor from './Cursor';
@@ -63,7 +64,8 @@ const width = svgWidth - margin.left - margin.right;
 const height = svgHeight - margin.top - margin.bottom;
 
 const ShootingSignature = props => {
-  const {data, hover, leagueShootingPct, maxDistance} = props;
+  const {data, leagueShootingPct, maxDistance} = props;
+  const hover = useHoverState();
 
   const x = scaleLinear()
     .domain([0, maxDistance])
@@ -131,10 +133,6 @@ ShootingSignature.propTypes = {
       width: PropTypes.number.isRequired,
     })
   ).isRequired,
-  hover: PropTypes.exact({
-    distance: PropTypes.number.isRequired,
-    toggle: PropTypes.bool.isRequired,
-  }).isRequired,
   leagueShootingPct: PropTypes.arrayOf(PropTypes.number).isRequired,
   maxDistance: PropTypes.number.isRequired,
 };

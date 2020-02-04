@@ -1,3 +1,9 @@
+export {
+  HoverProvider,
+  useHover,
+  useHoverDispatch,
+  useHoverState,
+} from './hoverContext';
 export {default as useLeagueShootingPctApi} from './useLeagueShootingPctApi';
 export {default as usePlayersApi} from './usePlayersApi';
 export {default as usePlayersWithRostersBySeasonApi} from './usePlayersWithRostersBySeasonApi';

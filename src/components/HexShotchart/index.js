@@ -5,6 +5,7 @@ import {hexbin} from 'd3-hexbin';
 import {scaleLinear, scaleSequential, scaleSqrt} from 'd3-scale';
 import {interpolatePlasma} from 'd3-scale-chromatic';
 
+import {useHoverState} from '../../hooks';
 import Court from '../Court';
 import ChartDiv from '../ChartDiv';
 import Hexagons from '../Hexagons';
@@ -20,6 +21,8 @@ const Svg = styled.svg`
 `;
 
 const ShotChart = props => {
+  const {data, leagueShootingPct} = props;
+  const hover = useHoverState();
   const [tooltip, setTooltip] = useState({
     color: 'none',
     makes: '',
@@ -54,8 +57,6 @@ const ShotChart = props => {
   const hexbinPath = hexbin()
     .size([width, height])
     .radius(hexbinSize);
-
-  const {data, hover, leagueShootingPct} = props;
 
   return (
     <ChartDiv>
@@ -111,10 +112,6 @@ ShotChart.propTypes = {
       made: PropTypes.bool.isRequired,
     })
   ).isRequired,
-  hover: PropTypes.exact({
-    distance: PropTypes.number.isRequired,
-    toggle: PropTypes.bool.isRequired,
-  }).isRequired,
   leagueShootingPct: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
