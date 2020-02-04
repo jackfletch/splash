@@ -5,8 +5,6 @@ const HoverStateContext = createContext();
 const HoverDispatchContext = createContext();
 
 const defaultState = {
-  activated: -1,
-  deactivated: -1,
   distance: -1,
   toggle: false,
 };
@@ -14,20 +12,15 @@ const defaultState = {
 function hoverReducer(state, action) {
   switch (action.type) {
     case 'activate': {
-      const {value} = action;
       return {
-        ...state,
-        activated: value,
-        distance: value,
-        toggle: value !== state.deactivated,
+        distance: action.value,
+        toggle: true,
       };
     }
     case 'deactivate': {
-      const {value} = action;
       return {
-        ...state,
-        deactivated: value,
-        toggle: state.activated !== value,
+        distance: state.distance,
+        toggle: state.distance !== action.value,
       };
     }
     case 'reset': {
