@@ -108,7 +108,7 @@ const BarChart = props => {
   const yScale = scaleLinear()
     .domain([0, 1])
     .range([height, 0]);
-  const scales = {
+  const scale = {
     x: xScale,
     y: yScale,
   };
@@ -175,14 +175,12 @@ const BarChart = props => {
             standalone={false}
             style={styles.lineOne}
           />
-          {hover.toggle && hover.distance >= 0 && (
-            <Cursor
-              x={scales.x(hover.distance + 0.5)}
-              datum={{x: hover.distance, ...data.bins[hover.distance]}}
-              totalShots={data.totalShots}
-              labeler={label}
-            />
-          )}
+          <Cursor
+            datum={{...data.bins[hover.distance]}}
+            totalShots={data.totalShots}
+            labeler={label}
+            scale={scale}
+          />
         </VictoryChart>
       </Div2>
     </ChartDiv>

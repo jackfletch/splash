@@ -5,7 +5,6 @@ import {interpolatePlasma} from 'd3-scale-chromatic';
 import {area, curveBasis} from 'd3-shape';
 import styled from 'styled-components';
 
-import {useHoverState} from '../../hooks';
 import ChartDiv from '../ChartDiv';
 import ChartTitle from '../ChartTitle';
 import Cursor from './Cursor';
@@ -65,7 +64,6 @@ const height = svgHeight - margin.top - margin.bottom;
 
 const ShootingSignature = props => {
   const {data, leagueShootingPct, maxDistance} = props;
-  const hover = useHoverState();
 
   const x = scaleLinear()
     .domain([0, maxDistance])
@@ -115,9 +113,7 @@ const ShootingSignature = props => {
                   style={{fill: `url(#${gradientId})`}}
                 />
               </Gradient>
-              {hover.toggle ? (
-                <Cursor x={hover.distance} scale={{x, y}} />
-              ) : null}
+              <Cursor scale={{x, y}} />
             </g>
           </g>
         </Svg>
