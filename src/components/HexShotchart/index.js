@@ -20,6 +20,7 @@ const Svg = styled.svg`
 `;
 
 const ShotChart = props => {
+  const {data, leagueShootingPct} = props;
   const [tooltip, setTooltip] = useState({
     color: 'none',
     makes: '',
@@ -55,8 +56,6 @@ const ShotChart = props => {
     .size([width, height])
     .radius(hexbinSize);
 
-  const {data, hover, leagueShootingPct} = props;
-
   return (
     <ChartDiv>
       <Svg
@@ -88,9 +87,7 @@ const ShotChart = props => {
               updateTooltip={setTooltip}
             />
           </g>
-          {hover.toggle && hover.distance >= 0 ? (
-            <ShotchartCursor hoverDistance={hover.distance} scale={scales} />
-          ) : null}
+          <ShotchartCursor scale={scales} />
           {tooltip.show ? <Tooltip vals={tooltip} /> : null}
         </g>
       </Svg>
@@ -111,10 +108,6 @@ ShotChart.propTypes = {
       made: PropTypes.bool.isRequired,
     })
   ).isRequired,
-  hover: PropTypes.exact({
-    distance: PropTypes.number.isRequired,
-    toggle: PropTypes.bool.isRequired,
-  }).isRequired,
   leagueShootingPct: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 

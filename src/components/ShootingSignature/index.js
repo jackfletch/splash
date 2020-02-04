@@ -63,7 +63,7 @@ const width = svgWidth - margin.left - margin.right;
 const height = svgHeight - margin.top - margin.bottom;
 
 const ShootingSignature = props => {
-  const {data, hover, leagueShootingPct, maxDistance} = props;
+  const {data, leagueShootingPct, maxDistance} = props;
 
   const x = scaleLinear()
     .domain([0, maxDistance])
@@ -113,9 +113,7 @@ const ShootingSignature = props => {
                   style={{fill: `url(#${gradientId})`}}
                 />
               </Gradient>
-              {hover.toggle ? (
-                <Cursor x={hover.distance} scale={{x, y}} />
-              ) : null}
+              <Cursor scale={{x, y}} />
             </g>
           </g>
         </Svg>
@@ -131,10 +129,6 @@ ShootingSignature.propTypes = {
       width: PropTypes.number.isRequired,
     })
   ).isRequired,
-  hover: PropTypes.exact({
-    distance: PropTypes.number.isRequired,
-    toggle: PropTypes.bool.isRequired,
-  }).isRequired,
   leagueShootingPct: PropTypes.arrayOf(PropTypes.number).isRequired,
   maxDistance: PropTypes.number.isRequired,
 };

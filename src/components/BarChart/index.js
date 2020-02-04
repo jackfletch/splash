@@ -10,6 +10,7 @@ import {
   VictoryVoronoiContainer,
 } from 'victory';
 
+import {useHover} from '../../hooks';
 import theme from '../victorytheme';
 import ChartDiv from '../ChartDiv';
 import ChartTitle from '../ChartTitle';
@@ -96,18 +97,10 @@ PercentAxisTickLabel.propTypes = {
 };
 
 const BarChart = props => {
-  const {
-    data,
-    domain,
-    hover,
-    label,
-    maxDistance,
-    setActivated,
-    setDeactivated,
-    title,
-    y,
-  } = props;
+  const {data, domain, label, maxDistance, title, y} = props;
   const {height, padding, width} = theme.area;
+
+  const [hover, dispatchHover] = useHover();
 
   const xScale = scaleLinear()
     .domain([0, maxDistance])
@@ -115,7 +108,7 @@ const BarChart = props => {
   const yScale = scaleLinear()
     .domain([0, 1])
     .range([height, 0]);
-  const scales = {
+  const scale = {
     x: xScale,
     y: yScale,
   };
@@ -135,18 +128,17 @@ const BarChart = props => {
             <VictoryVoronoiContainer
               voronoiDimension="x"
               onActivated={points => {
-                setActivated(points[0].x);
+                dispatchHover({type: 'activate', value: points[0].x});
               }}
               onDeactivated={points => {
                 if (points.length) {
-                  setDeactivated(points[0].x);
+                  dispatchHover({type: 'deactivate', value: points[0].x});
                 }
               }}
               events={{
                 onMouseOut: () => {
                   if (!hover.toggle) {
-                    setActivated(-15);
-                    setDeactivated(-15);
+                    dispatchHover({type: 'reset'});
                   }
                 },
               }}
@@ -183,14 +175,12 @@ const BarChart = props => {
             standalone={false}
             style={styles.lineOne}
           />
-          {hover.toggle && hover.distance >= 0 && (
-            <Cursor
-              x={scales.x(hover.distance + 0.5)}
-              datum={{x: hover.distance, ...data.bins[hover.distance]}}
-              totalShots={data.totalShots}
-              labeler={label}
-            />
-          )}
+          <Cursor
+            datum={{...data.bins[hover.distance]}}
+            totalShots={data.totalShots}
+            labeler={label}
+            scale={scale}
+          />
         </VictoryChart>
       </Div2>
     </ChartDiv>
@@ -210,14 +200,8 @@ BarChart.propTypes = {
     totalShotsWithinMaxDistance: PropTypes.number.isRequired,
   }).isRequired,
   domain: PropTypes.arrayOf(PropTypes.number),
-  hover: PropTypes.exact({
-    distance: PropTypes.number.isRequired,
-    toggle: PropTypes.bool.isRequired,
-  }).isRequired,
   label: PropTypes.func.isRequired,
   maxDistance: PropTypes.number.isRequired,
-  setActivated: PropTypes.func.isRequired,
-  setDeactivated: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   y: PropTypes.func.isRequired,
 };

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
@@ -9,7 +9,7 @@ import ShootingSignature from '../../components/ShootingSignature';
 import BarChart, {
   functions as barChartFunctions,
 } from '../../components/BarChart';
-import {useShotsApi, useLeagueShootingPctApi} from '../../hooks';
+import {HoverProvider, useShotsApi, useLeagueShootingPctApi} from '../../hooks';
 
 const ChartsDiv = styled.div`
   display: flex;
@@ -18,10 +18,10 @@ const ChartsDiv = styled.div`
   ${media.tablet`flex-direction: column;`}
 `;
 
+const withHoverProvider = children => <HoverProvider>{children}</HoverProvider>;
+
 const Charts = ({playerId, seasonId}) => {
   const maxDistance = 35;
-  const [activated, setActivated] = useState(0);
-  const [deactivated, setDeactivated] = useState(0);
   const [leagueShootingPct] = useLeagueShootingPctApi(maxDistance, seasonId);
   const [{data, ribbonedData, binnedData}] = useShotsApi(
     playerId,
@@ -44,42 +44,26 @@ const Charts = ({playerId, seasonId}) => {
     return <div>Not enough shots by this player for any meaningful data</div>;
   }
 
-  const hover = {
-    distance: activated,
-    toggle: activated !== deactivated,
-  };
-
-  return (
+  return withHoverProvider(
     <ChartsDiv>
-      <HexShotchart
-        data={data}
-        hover={hover}
-        leagueShootingPct={leagueShootingPct}
-      />
+      <HexShotchart data={data} leagueShootingPct={leagueShootingPct} />
       <ShootingSignature
         data={ribbonedData}
-        hover={hover}
         leagueShootingPct={leagueShootingPct}
         maxDistance={maxDistance}
       />
       <BarChart
         data={binnedData}
-        hover={hover}
         label={barChartFunctions.shotProportion.labeler}
         maxDistance={maxDistance}
-        setActivated={setActivated}
-        setDeactivated={setDeactivated}
         title="Shot Proportion by Distance"
         y={barChartFunctions.shotProportion.accessor}
       />
       <BarChart
         data={binnedData}
         domain={[0, 100]}
-        hover={hover}
         label={barChartFunctions.fieldGoalPercentage.labeler}
         maxDistance={maxDistance}
-        setActivated={setActivated}
-        setDeactivated={setDeactivated}
         title="Field Goal Percentage by Distance"
         y={barChartFunctions.fieldGoalPercentage.accessor}
       />
