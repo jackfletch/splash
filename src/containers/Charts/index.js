@@ -10,6 +10,9 @@ import BarChart, {
   functions as barChartFunctions,
 } from '../../components/BarChart';
 import {HoverProvider, useShotsApi, useLeagueShootingPctApi} from '../../hooks';
+import LeftRightChart, {
+  functions as leftRightFunctions,
+} from '../../components/LeftRightChart';
 
 const ChartsDiv = styled.div`
   display: flex;
@@ -23,7 +26,7 @@ const withHoverProvider = children => <HoverProvider>{children}</HoverProvider>;
 const Charts = ({playerId, seasonId}) => {
   const maxDistance = 35;
   const [leagueShootingPct] = useLeagueShootingPctApi(maxDistance, seasonId);
-  const [{data, ribbonedData, binnedData}] = useShotsApi(
+  const [{data, ribbonedData, binnedData, leftRightData}] = useShotsApi(
     playerId,
     seasonId,
     maxDistance
@@ -45,29 +48,47 @@ const Charts = ({playerId, seasonId}) => {
   }
 
   return withHoverProvider(
-    <ChartsDiv>
-      <HexShotchart data={data} leagueShootingPct={leagueShootingPct} />
-      <ShootingSignature
-        data={ribbonedData}
-        leagueShootingPct={leagueShootingPct}
-        maxDistance={maxDistance}
-      />
-      <BarChart
-        data={binnedData}
-        label={barChartFunctions.shotProportion.labeler}
-        maxDistance={maxDistance}
-        title="Shot Proportion by Distance"
-        y={barChartFunctions.shotProportion.accessor}
-      />
-      <BarChart
-        data={binnedData}
-        domain={[0, 100]}
-        label={barChartFunctions.fieldGoalPercentage.labeler}
-        maxDistance={maxDistance}
-        title="Field Goal Percentage by Distance"
-        y={barChartFunctions.fieldGoalPercentage.accessor}
-      />
-    </ChartsDiv>
+    <>
+      <ChartsDiv>
+        <HexShotchart data={data} leagueShootingPct={leagueShootingPct} />
+        <ShootingSignature
+          data={ribbonedData}
+          leagueShootingPct={leagueShootingPct}
+          maxDistance={maxDistance}
+        />
+        <BarChart
+          data={binnedData}
+          label={barChartFunctions.shotProportion.labeler}
+          maxDistance={maxDistance}
+          title="Shot Proportion by Distance"
+          y={barChartFunctions.shotProportion.accessor}
+        />
+        <BarChart
+          data={binnedData}
+          domain={[0, 100]}
+          label={barChartFunctions.fieldGoalPercentage.labeler}
+          maxDistance={maxDistance}
+          title="Field Goal Percentage by Distance"
+          y={barChartFunctions.fieldGoalPercentage.accessor}
+        />
+      </ChartsDiv>
+      <ChartsDiv>
+        <LeftRightChart
+          accessor={leftRightFunctions.shotFrequency.accessor}
+          data={leftRightData}
+          domain={leftRightFunctions.shotFrequency.domain}
+          maxDistance={maxDistance}
+          title="Shooting Frequency by Side"
+        />
+        <LeftRightChart
+          accessor={leftRightFunctions.fieldGoalPercentage.accessor}
+          data={leftRightData}
+          domain={leftRightFunctions.fieldGoalPercentage.domain}
+          maxDistance={maxDistance}
+          title="Field Goal Percentage by Side"
+        />
+      </ChartsDiv>
+    </>
   );
 };
 

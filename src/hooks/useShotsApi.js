@@ -1,6 +1,10 @@
 import {useEffect, useState} from 'react';
 import axios from 'axios';
-import {binShots, ribbonShots} from '@jackfletch/splash-vis-utils';
+import {
+  binShots,
+  binLeftRight,
+  ribbonShots,
+} from '@jackfletch/splash-vis-utils';
 
 import {apiOrigin} from '../utils/config';
 
@@ -8,6 +12,7 @@ function useShotsApi(playerId, seasonId, maxDistance) {
   const [data, setData] = useState(undefined);
   const [ribbonedData, setRibbonedData] = useState([]);
   const [binnedData, setBinnedData] = useState({});
+  const [leftRightData, setLeftRightData] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,11 +23,12 @@ function useShotsApi(playerId, seasonId, maxDistance) {
       setData(res.data);
       setRibbonedData(ribbonShots(res.data, maxDistance));
       setBinnedData(binShots(res.data, maxDistance));
+      setLeftRightData(binLeftRight(res.data, maxDistance));
     };
     fetchData();
   }, [playerId, seasonId, maxDistance]);
 
-  return [{data, ribbonedData, binnedData}];
+  return [{data, ribbonedData, binnedData, leftRightData}];
 }
 
 export default useShotsApi;
