@@ -39,7 +39,7 @@ const ShotChart = props => {
 
   const xScale = scaleLinear()
     .domain([-250, 250])
-    .range([0, width]);
+    .range([margin.left, width + margin.right]);
   const yScale = scaleLinear()
     .domain([-52.5, 417.5])
     .range([height, 0]);
@@ -62,7 +62,7 @@ const ShotChart = props => {
         display="block"
         height="100%"
         width="100%"
-        viewBox={`0 0 ${width} ${height}`}
+        viewBox={`0 0 ${svgWidth} ${svgHeight}`}
         preserveAspectRatio="xMidYMid meet"
       >
         <g>
