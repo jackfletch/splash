@@ -9,10 +9,10 @@ import ShootingSignature from '../../components/ShootingSignature';
 import BarChart, {
   functions as barChartFunctions,
 } from '../../components/BarChart';
-import {HoverProvider, useShotsApi, useLeagueShootingPctApi} from '../../hooks';
 import LeftRightChart, {
   functions as leftRightFunctions,
 } from '../../components/LeftRightChart';
+import {HoverProvider, useShotsApi, useLeagueShootingPctApi} from '../../hooks';
 
 const ChartsDiv = styled.div`
   display: flex;
