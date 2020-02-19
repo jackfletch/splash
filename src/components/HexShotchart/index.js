@@ -36,6 +36,7 @@ const ShotChart = props => {
   const height = svgHeight - margin.top - margin.bottom;
   const backgroundColor = '#ddd';
   const hexbinSize = 10;
+  const clipPathId = 'hexshotchart-court-clip-path';
 
   const xScale = scaleLinear()
     .domain([-250, 250])
@@ -66,16 +67,17 @@ const ShotChart = props => {
         preserveAspectRatio="xMidYMid meet"
       >
         <g>
-          <rect
-            x={xScale(-250)}
-            y={yScale(417.5)}
-            width={width}
-            height={height}
-            fill={backgroundColor}
-            stroke="none"
-          />
-          <Court width={width} height={height} scale={scales} />
-          <g clipPath="url(#clip)">
+          <clipPath id={clipPathId}>
+            <rect width={width} height={height} />
+          </clipPath>
+          <g clipPath={`url(#${clipPathId})`}>
+            <rect
+              width={width}
+              height={height}
+              fill={backgroundColor}
+              stroke="none"
+            />
+            <Court width={width} height={height} scale={scales} />
             <Hexagons
               color={color}
               data={data}
@@ -86,8 +88,8 @@ const ShotChart = props => {
               scale={scales}
               updateTooltip={setTooltip}
             />
+            <ShotchartCursor scale={scales} />
           </g>
-          <ShotchartCursor scale={scales} />
           {tooltip.show ? <Tooltip vals={tooltip} /> : null}
         </g>
       </Svg>

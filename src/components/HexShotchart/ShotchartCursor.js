@@ -9,7 +9,6 @@ const ShotchartCursor = ({scale}) => {
   return (
     hover.toggle && (
       <ellipse
-        clipPath="url(#clip)"
         cx={scale.x(0)}
         cy={scale.y(0)}
         rx={scale.x((hover.distance + 0.5) * 10) - scale.x(0)}

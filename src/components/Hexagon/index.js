@@ -58,19 +58,17 @@ const Hexagon = props => {
   };
 
   return (
-    <g className="hexPath">
-      <path
-        shapeRendering="geometricPrecision"
-        transform={`translate(${scale.x(x)},${scale.y(y)})`}
-        d={hexbinPath.hexagon(renderSize(radius(totalShots), hexbinSize))}
-        style={{
-          fill: color,
-        }}
-        onMouseEnter={() => setTooltip(updateTooltip, tooltipProps)}
-        onMouseLeave={() => resetTooltip(updateTooltip)}
-        onClick={() => setTooltip(updateTooltip, tooltipProps)}
-      />
-    </g>
+    <path
+      shapeRendering="geometricPrecision"
+      transform={`translate(${scale.x(x)},${scale.y(y)})`}
+      d={hexbinPath.hexagon(renderSize(radius(totalShots), hexbinSize))}
+      style={{
+        fill: color,
+      }}
+      onMouseEnter={() => setTooltip(updateTooltip, tooltipProps)}
+      onMouseLeave={() => resetTooltip(updateTooltip)}
+      onClick={() => setTooltip(updateTooltip, tooltipProps)}
+    />
   );
 };
 
