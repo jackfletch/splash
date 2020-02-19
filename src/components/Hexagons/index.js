@@ -17,9 +17,8 @@ function Hexagons(props) {
   const shots = data.map(shot => [shot.x, shot.y, shot.made]);
 
   return (
-    hexbinPath(shots)
-      // .slice(0, 2)
-      .map(bin => (
+    <g className="hexagons">
+      {hexbinPath(shots).map(bin => (
         <Hexagon
           key={bin.x.toString() + bin.y.toString()}
           color={color}
@@ -31,7 +30,8 @@ function Hexagons(props) {
           scale={scale}
           updateTooltip={updateTooltip}
         />
-      ))
+      ))}
+    </g>
   );
 }
 
