@@ -40,7 +40,7 @@ const ShotChart = props => {
 
   const xScale = scaleLinear()
     .domain([-250, 250])
-    .range([margin.left, width + margin.right]);
+    .range([0, width]);
   const yScale = scaleLinear()
     .domain([-52.5, 417.5])
     .range([height, 0]);
@@ -66,7 +66,7 @@ const ShotChart = props => {
         viewBox={`0 0 ${svgWidth} ${svgHeight}`}
         preserveAspectRatio="xMidYMid meet"
       >
-        <g>
+        <g transform={`translate(${margin.left}, ${margin.top})`}>
           <clipPath id={clipPathId}>
             <rect width={width} height={height} />
           </clipPath>
