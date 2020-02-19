@@ -1,13 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function Court({
-  height,
-  lineColor = '#aaa',
-  scale,
-  strokeWidth = 1.667,
-  width,
-}) {
+const Court = ({lineColor = '#aaa', scale, strokeWidth = 1.667}) => {
   const dThreePointLine = [
     'M',
     scale.x(-220),
@@ -254,22 +248,16 @@ function Court({
           }
         />
       ))}
-
-      <clipPath id="clip">
-        <rect className="mesh" width={width} height={height} />
-      </clipPath>
     </g>
   );
-}
+};
 
 Court.propTypes = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
+  lineColor: PropTypes.string,
   scale: PropTypes.shape({
     x: PropTypes.func,
     y: PropTypes.func,
   }).isRequired,
-  lineColor: PropTypes.string,
   strokeWidth: PropTypes.number,
 };
 

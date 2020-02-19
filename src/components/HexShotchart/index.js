@@ -66,6 +66,9 @@ const ShotChart = props => {
         preserveAspectRatio="xMidYMid meet"
       >
         <g>
+          <clipPath id="clip">
+            <rect width={width} height={height} />
+          </clipPath>
           <rect
             x={xScale(-250)}
             y={yScale(417.5)}
