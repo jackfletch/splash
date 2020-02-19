@@ -70,16 +70,14 @@ const ShotChart = props => {
           <clipPath id={clipPathId}>
             <rect width={width} height={height} />
           </clipPath>
-          <rect
-            x={xScale(-250)}
-            y={yScale(417.5)}
-            width={width}
-            height={height}
-            fill={backgroundColor}
-            stroke="none"
-          />
-          <Court width={width} height={height} scale={scales} />
           <g clipPath={`url(#${clipPathId})`}>
+            <rect
+              width={width}
+              height={height}
+              fill={backgroundColor}
+              stroke="none"
+            />
+            <Court width={width} height={height} scale={scales} />
             <Hexagons
               color={color}
               data={data}
