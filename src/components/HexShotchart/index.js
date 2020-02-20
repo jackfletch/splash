@@ -90,7 +90,7 @@ const ShotChart = props => {
             />
             <ShotchartCursor scale={scales} />
           </g>
-          {tooltip.show ? <Tooltip vals={tooltip} /> : null}
+          {tooltip.show && <Tooltip vals={tooltip} />}
         </g>
       </Svg>
     </ChartDiv>
