@@ -13,6 +13,9 @@ The database schema and ETL functions are in [@jackfletch/splash-db].
 
 - add an ergonomic player selection
 - add more charts
+  - left-right chart
+    - implement hover manually
+  - career shooting percentage trend chart
 - design a proper layout
 - style consistently
 - refactor to React hooks
