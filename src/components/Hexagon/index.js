@@ -6,9 +6,8 @@ import {distance as euclideanDistance} from '../../lib';
 const resetTooltip = updateTooltip => {
   updateTooltip({
     color: 'none',
-    makes: '',
-    opacity: 0,
-    shots: '',
+    makes: 0,
+    shots: 0,
     show: false,
   });
 };
@@ -16,7 +15,6 @@ const resetTooltip = updateTooltip => {
 const setTooltip = (updateTooltip, props) => {
   updateTooltip({
     ...props,
-    opacity: 0.75,
     show: true,
   });
 };
