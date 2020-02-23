@@ -15,9 +15,8 @@ const Tooltip = props => {
         rx={5}
         ry={5}
         fill="#222"
-        fillOpacity={vals.opacity}
+        fillOpacity={0.75}
         stroke="none"
-        style={vals.opacity === 0 && {display: 'none'}}
       />
       <g>
         <rect
