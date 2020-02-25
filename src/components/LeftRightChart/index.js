@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import {scaleLinear} from 'd3-scale';
 
 import ChartDiv from '../ChartDiv';
 import ChartTitle from '../ChartTitle';
 import {XAxis, YAxis} from './Axis';
 import Cursor from './Cursor';
+import {Rect, Svg} from './style';
 
 const margin = {top: 20, right: 50, bottom: 50, left: 50};
 const svgWidth = 450;
@@ -14,17 +14,6 @@ const svgHeight = 300;
 
 const barWidth = 0.8;
 const barPadding = 1 - barWidth;
-
-const Svg = styled.svg`
-  display: block;
-  margin: 0 auto;
-  height: auto;
-  width: 100%;
-`;
-
-const Rect = styled.rect`
-  fill: rgba(43, 49, 55, 0.5);
-`;
 
 const LeftRightChart = props => {
   const {accessor, data, domain, maxDistance, title} = props;
