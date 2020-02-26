@@ -25,7 +25,7 @@ const LeftRightChart = props => {
   const yScale = scaleLinear()
     .domain([0, maxDistance])
     .range([svgHeight - margin.bottom, margin.top]);
-  const scales = {
+  const scale = {
     x: xScale,
     y: yScale,
   };
@@ -37,8 +37,8 @@ const LeftRightChart = props => {
         viewBox={`0 0 ${svgWidth} ${svgHeight}`}
         preserveAspectRatio="xMidYMid meet"
       >
-        <XAxis scale={scales} />
-        <YAxis scale={scales} />
+        <XAxis scale={scale} />
+        <YAxis scale={scale} />
         {data.left?.map(
           (d, i) =>
             d.total !== 0 && (
@@ -63,7 +63,7 @@ const LeftRightChart = props => {
               />
             )
         )}
-        <Cursor scale={scales} />
+        <Cursor scale={scale} />
       </Svg>
     </ChartDiv>
   );
