@@ -11,3 +11,4 @@ export {default as usePlayersWithRostersBySeasonApi} from './usePlayersWithRoste
 export {default as useShotsApi} from './useShotsApi';
 export {default as useSeasonsApi} from './useSeasonsApi';
 export {default as useUrlSearchParams} from './useUrlSearchParams';
+export {default as useVoronoi} from './useVoronoi';
