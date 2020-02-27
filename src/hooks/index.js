@@ -4,6 +4,7 @@ export {
   useHoverDispatch,
   useHoverState,
 } from './hoverContext';
+export {default as useActivatorEvents} from './useActivatorEvents';
 export {default as useChartScale} from './useChartScale';
 export {default as useLeagueShootingPctApi} from './useLeagueShootingPctApi';
 export {default as usePlayersApi} from './usePlayersApi';
