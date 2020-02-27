@@ -29,6 +29,20 @@ const labeler = {
   }),
 };
 
+export const voronoiActivatorEvents = {
+  onActivated: dispatch => (point, i) => {
+    dispatch({type: 'activate', value: i});
+  },
+  onDeactivated: dispatch => (point, i) => {
+    if (point) {
+      dispatch({
+        type: 'deactivate',
+        value: i,
+      });
+    }
+  },
+};
+
 export default {
   shotFrequency: {
     accessor: accessor.shotFrequency,
