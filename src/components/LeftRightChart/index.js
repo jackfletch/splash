@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {scaleLinear} from 'd3-scale';
 
+import {useChartScale} from '../../hooks';
 import ChartDiv from '../ChartDiv';
 import ChartTitle from '../ChartTitle';
 import {XAxis, YAxis} from './Axis';
@@ -14,21 +15,15 @@ const svgHeight = 300;
 
 const barWidth = 0.8;
 const barPadding = 1 - barWidth;
+const barRectOffset = 1 - barPadding / 2;
 
 const LeftRightChart = props => {
   const {accessor, data, domain, maxDistance, title} = props;
 
-  const xDomain = React.useMemo(() => domain(data), [data, domain]);
-  const xScale = scaleLinear()
-    .domain(xDomain)
-    .range([margin.left, svgWidth - margin.right]);
-  const yScale = scaleLinear()
-    .domain([0, maxDistance])
-    .range([svgHeight - margin.bottom, margin.top]);
-  const scale = {
-    x: xScale,
-    y: yScale,
-  };
+  const scale = useChartScale(data, domain, maxDistance, margin, {
+    height: svgHeight,
+    width: svgWidth,
+  });
 
   return (
     <ChartDiv>
@@ -43,11 +38,11 @@ const LeftRightChart = props => {
           (d, i) =>
             d.total !== 0 && (
               <Rect
-                x={xScale(-accessor(d))}
-                y={yScale(i + 1 - barPadding / 2)}
-                width={xScale(0) - xScale(-accessor(d))}
-                height={yScale(0) - yScale(1 - barPadding)}
-                key={`${i}-${d.total}`}
+                x={scale.x(-accessor(d))}
+                y={scale.y(i + barRectOffset)}
+                width={scale.x(0) - scale.x(-accessor(d))}
+                height={scale.y(0) - scale.y(1 - barPadding)}
+                key={`left-${i}-${d.total}`}
               />
             )
         )}
@@ -55,11 +50,11 @@ const LeftRightChart = props => {
           (d, i) =>
             d.total !== 0 && (
               <Rect
-                x={xScale(0)}
-                y={yScale(i + 1 - barPadding / 2)}
-                width={xScale(accessor(d)) - xScale(0)}
-                height={yScale(0) - yScale(1 - barPadding)}
-                key={`${i}-${d.total}`}
+                x={scale.x(0)}
+                y={scale.y(i + barRectOffset)}
+                width={scale.x(accessor(d)) - scale.x(0)}
+                height={scale.y(0) - scale.y(1 - barPadding)}
+                key={`right-${i}-${d.total}`}
               />
             )
         )}
