@@ -12,7 +12,7 @@ import ChartTitle from '../ChartTitle';
 import {XAxis, YAxis} from './Axis';
 import Cursor from './Cursor';
 import {voronoiActivatorEvents} from './functions';
-import {Rect, Svg} from './style';
+import {Rect, StaticSvg as Svg} from './style';
 
 const margin = {top: 20, right: 50, bottom: 50, left: 50};
 const svgWidth = 450;
