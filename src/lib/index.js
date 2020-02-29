@@ -1,4 +1,2 @@
-import distance from './distance';
-import square from './square';
-
-export {distance, square};
+export {default as distance} from './distance';
+export {default as square} from './square';
