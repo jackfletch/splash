@@ -19,8 +19,9 @@ const NoninteractiveDiv = styled.div`
   touch-action: none;
 `;
 
-const withoutInteraction = component => (
-  <NoninteractiveDiv>{component}</NoninteractiveDiv>
-);
-
-export const StaticSvg = withoutInteraction(Svg);
+export const StaticSvg = React.forwardRef((props, ref) => (
+  <NoninteractiveDiv>
+    {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+    <Svg {...props} ref={ref}></Svg>
+  </NoninteractiveDiv>
+));
