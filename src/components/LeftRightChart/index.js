@@ -26,9 +26,14 @@ const voronoiDimension = 'y';
 const voronoiOptions = {voronoiDimension};
 
 const LeftRightChart = props => {
-  const {accessor, data, domain, maxDistance, title} = props;
+  const {accessor, data, domain: xDomain, maxDistance, title} = props;
   const [hover, dispatchHover] = useHover();
   const svgRef = createRef();
+
+  const domain = useMemo(() => ({x: xDomain, y: d => [0, maxDistance]}), [
+    xDomain,
+    maxDistance,
+  ]);
 
   const scale = useChartScale(data, domain, maxDistance, margin, {
     height: svgHeight,

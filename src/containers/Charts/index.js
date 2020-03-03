@@ -57,19 +57,20 @@ const Charts = ({playerId, seasonId}) => {
           maxDistance={maxDistance}
         />
         <BarChart
+          accessor={barChartFunctions.shotProportion.accessor}
           data={binnedData}
+          domain={barChartFunctions.shotProportion.domain}
           label={barChartFunctions.shotProportion.labeler}
           maxDistance={maxDistance}
           title="Shot Proportion by Distance"
-          y={barChartFunctions.shotProportion.accessor}
         />
         <BarChart
+          accessor={barChartFunctions.fieldGoalPercentage.accessor}
           data={binnedData}
-          domain={[0, 100]}
+          domain={barChartFunctions.fieldGoalPercentage.domain}
           label={barChartFunctions.fieldGoalPercentage.labeler}
           maxDistance={maxDistance}
           title="Field Goal Percentage by Distance"
-          y={barChartFunctions.fieldGoalPercentage.accessor}
         />
       </ChartsDiv>
       <ChartsDiv>
