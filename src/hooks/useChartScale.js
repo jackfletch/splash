@@ -4,10 +4,9 @@ import {scaleLinear} from 'd3-scale';
 /**
  * Create a scale object for the given chart parameters.
  * @param {Object} data
- * @param {Object} scale the scale object for the associated graph.
- * @param {Function} scale.x the x scale.
- * @param {Function} scale.y the y scale.
- * @param {[Number, Number]} domain
+ * @param {Object} domain the domain object for the associated graph.
+ * @param {Function} domain.x the x domain accessor.
+ * @param {Function} domain.y the y domain accessor.
  * @param {Number} maxDistance
  * @param {Object} margin
  * @param {Object} svgDimensions
@@ -18,12 +17,13 @@ function useScale(data, domain, maxDistance, margin, svgDimensions) {
   const [scale, setScale] = useState(undefined);
 
   useEffect(() => {
-    const xDomain = domain(data);
+    const xDomain = domain.x(data);
+    const yDomain = domain.y(data);
     const xScale = scaleLinear()
       .domain(xDomain)
       .range([margin.left, width - margin.right]);
     const yScale = scaleLinear()
-      .domain([0, maxDistance])
+      .domain(yDomain)
       .range([height - margin.bottom, margin.top]);
     setScale({
       x: xScale,
