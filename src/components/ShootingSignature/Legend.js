@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {scaleLinear} from 'd3-scale';
 import styled from 'styled-components';
 
-import theme from '../victorytheme';
+import theme from '../../theme';
 
 const TSpan = styled.tspan`
   font-size: 14px;
