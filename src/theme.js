@@ -1,9 +1,3 @@
-/*
-  "grayscale" theme (VictoryTheme.grayscale)
-  The grayscale is the default theme.
-  Try changing it. You could start with `colors` or `fontSize`.
-*/
-
 // Colors
 const colors = [
   '#252525',
@@ -50,7 +44,7 @@ const strokeLinecap = 'round';
 const strokeLinejoin = 'round';
 
 // Create the theme
-const splashTheme = {
+const theme = {
   area: {
     style: {
       data: {
@@ -199,4 +193,4 @@ const splashTheme = {
   },
 };
 
-export default splashTheme;
+export default theme;
