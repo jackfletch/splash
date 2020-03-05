@@ -5,6 +5,7 @@ import {
   binLeftRight,
   ribbonShots,
 } from '@jackfletch/splash-vis-utils';
+import isLessThanDistance from '@jackfletch/splash-vis-utils/dist/esnext/filters/isLessThanDistance';
 
 import {apiOrigin} from '../utils/config';
 
@@ -20,7 +21,7 @@ function useShotsApi(playerId, seasonId, maxDistance) {
       endpoint.pathname = `/api/shots/player/${playerId}/season/${seasonId}`;
 
       const res = await axios.get(endpoint);
-      setData(res.data);
+      setData(res.data.filter(isLessThanDistance(maxDistance)));
       setRibbonedData(ribbonShots(res.data, maxDistance));
       setBinnedData(binShots(res.data, maxDistance));
       setLeftRightData(binLeftRight(res.data, maxDistance));
