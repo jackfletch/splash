@@ -45,7 +45,9 @@ const Hexagon = props => {
   const madeShots = data.reduce((a, b) => a + b[2], 0);
   const totalShots = data.length;
   const shootingPct = madeShots / totalShots;
-  const shootingPctAboveAvg = shootingPct - leagueShootingPct[distance];
+  const shootingPctAboveAvg =
+    shootingPct -
+    (leagueShootingPct[distance] ?? leagueShootingPct[distance - 1]);
   const color = colorScale(shootingPctAboveAvg);
 
   const tooltipProps = {
